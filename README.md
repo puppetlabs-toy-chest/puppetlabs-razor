@@ -17,14 +17,14 @@ Here's a list of dependency for razor module:
 
 Puppet master, add razor class to target node:
 
-   node razor_system {
-     include razor
-   }
+    node razor_system {
+      include razor
+    }
 
 Puppet apply, apply test manifests:
 
-   puppet apply razor/tests/init.pp
+    puppet apply razor/tests/init.pp
 
 git clone razor private repo to the system.
 
-   git clone git@github.com:nanliu/Razor.git
+    git clone git@github.com:nanliu/Razor.git
