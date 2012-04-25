@@ -10,7 +10,7 @@ https://github.com/puppetlabs/puppet-razor
 Here's a list of dependency for razor module:
 
 * [apt module](https://github.com/puppetlabs/puppet-apt)
-* [stdlib module](https://github.com/puppetlabs/puppet-stdlib)
+* [stdlib module](https://github.com/puppetlabs/puppetlabs-stdlib)
 * [Node.js module](https://github.com/nanliu/puppet-nodejs)
 * [Mongodb module](https://github.com/nanliu/puppet-mongodb)
 * [tftp module](https://github.com/nanliu/puppet-tftp)
