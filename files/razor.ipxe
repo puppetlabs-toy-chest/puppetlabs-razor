@@ -1,0 +1,4 @@
+#!ipxe
+dhcp
+
+chain http://192.168.232.130:8026/razor/api/boot?mac=${net0/mac}
