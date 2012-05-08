@@ -65,5 +65,26 @@ class razor {
     require  => Class['nodejs'],
   }
 
+  file { '/opt/razor':
+    ensure => directory,
+    mode   => '0755',
+  }
+
+  vcsrepo { '/opt/razor':
+    ensure   => latest,
+    provider => git,
+    source   => 'git://github.com/puppetlabs/Razor.git',
+  }
+
+  nodejs::npm { '/opt/razor:express':
+    ensure   => present,
+    require  => File['/opt/razor'],
+  }
+
+  nodejs::npm { '/opt/razor:mime':
+    ensure   => present,
+    require  => File['/opt/razor'],
+  }
+
   include mongodb
 }

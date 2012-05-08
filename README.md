@@ -1,7 +1,6 @@
 # Razor Module
 
-Puppet Razor module will perform the installation of Razor software dependency
-on Debian Wheezy system.
+Puppet Razor module will perform the installation of Razor on Debian Wheezy system.
 
 ## Installation
 
@@ -10,10 +9,10 @@ https://github.com/puppetlabs/puppet-razor
 Here's a list of dependency for razor module:
 
 * [apt module](https://github.com/puppetlabs/puppet-apt)
+* [Mongodb module](https://github.com/puppetlabs/puppetlabs-mongodb)
+* [Node.js module](https://github.com/puppetlabs/puppetlabs-nodejs)
 * [stdlib module](https://github.com/puppetlabs/puppetlabs-stdlib)
-* [Node.js module](https://github.com/nanliu/puppet-nodejs)
-* [Mongodb module](https://github.com/nanliu/puppet-mongodb)
-* [tftp module](https://github.com/nanliu/puppet-tftp)
+* [tftp module](https://github.com/puppetlabs/puppetlabs-tftp)
 
 Puppet master, add razor class to target node:
 
@@ -25,6 +24,6 @@ Puppet apply, apply test manifests:
 
     puppet apply razor/tests/init.pp
 
-git clone razor private repo to the system.
+## Razor Usage
 
-    git clone git@github.com:nanliu/Razor.git
+See Razor project wiki pages.
