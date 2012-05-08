@@ -27,7 +27,7 @@ class razor {
 
   package { [ 'mongo', 'bson', 'bson_ext', 'rspec', 'syntax', 'uuid',
               'logger', 'extlib', 'json', 'colored', 'bluepill', 'autotest',
-              'redcarpet', 'mocha' ]:
+              'redcarpet', 'mocha', 'base62' ]:
     ensure   => present,
     provider => gem,
     require  => Exec['ruby_1.9.3_default'],
