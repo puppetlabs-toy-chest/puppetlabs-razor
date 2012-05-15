@@ -8,7 +8,10 @@
 #
 # Usage:
 #
-class razor {
+class razor (
+  $username  = 'razor',
+  $directory = '/opt/razor'
+){
   package { 'ruby1.9.3':
     ensure => present,
   }
@@ -57,6 +60,23 @@ class razor {
     content => template('razor/razor.ipxe.erb'),
   }
 
+  user { $username:
+    ensure => present,
+    gid    => $username,
+    home   => $directory,
+  }
+
+  group { $username:
+    ensure => present,
+  }
+
+  include sudo
+
+  sudo::conf { 'razor':
+    priority => 10,
+    content  => "${username} ALL=(root) NOPASSWD: /bin/mount, /bin/umount\n",
+  }
+
   include nodejs
 
   package { 'express':
@@ -65,25 +85,28 @@ class razor {
     require  => Class['nodejs'],
   }
 
-  file { '/opt/razor':
-    ensure => directory,
-    mode   => '0755',
+  file { $directory:
+    ensure  => directory,
+    mode    => '0755',
+    owner   => $username,
+    group   => $username,
+    require => Vcsrepo[$directory],
   }
 
-  vcsrepo { '/opt/razor':
+  vcsrepo { $directory:
     ensure   => latest,
     provider => git,
     source   => 'git://github.com/puppetlabs/Razor.git',
   }
 
-  nodejs::npm { '/opt/razor:express':
+  nodejs::npm { "${directory}:express":
     ensure   => present,
-    require  => File['/opt/razor'],
+    require  => File[$directory],
   }
 
-  nodejs::npm { '/opt/razor:mime':
+  nodejs::npm { "${directory}:mime":
     ensure   => present,
-    require  => File['/opt/razor'],
+    require  => File[$directory],
   }
 
   include mongodb
