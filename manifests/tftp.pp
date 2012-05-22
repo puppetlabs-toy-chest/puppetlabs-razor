@@ -1,6 +1,5 @@
 class razor::tftp {
   include tftp
-  Class['razor::tftp'] -> Class['razor']
 
   tftp::file { 'pxelinux.0':
     source => 'puppet:///modules/razor/pxelinux.0',

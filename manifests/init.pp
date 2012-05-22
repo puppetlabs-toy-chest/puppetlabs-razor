@@ -15,31 +15,14 @@ class razor (
 
   include mongodb
   include sudo
-  include 'razor::nodejs'
   include 'razor::tftp'
+  include 'razor::ruby19'
 
-  package { 'ruby1.9.3':
-    ensure => present,
-  }
+  Class['razor::tftp'] -> Class['razor']
+  Class['razor::ruby19'] -> Class['razor']
 
-  package { 'ruby-switch':
-    ensure => present,
-  }
-
-  # The command is set 1.9.1, but actually sets to 1.9.3:
-  exec { 'ruby_1.9.3_default':
-    command     => 'ruby-switch --set ruby1.9.1',
-    path        => $::path,
-    refreshonly => true,
-    subscribe   => Package['ruby1.9.3', 'ruby-switch'],
-  }
-
-  package { [ 'mongo', 'bson', 'bson_ext', 'rspec', 'syntax', 'uuid',
-              'logger', 'extlib', 'json', 'colored', 'bluepill', 'autotest',
-              'redcarpet', 'mocha', 'base62' ]:
-    ensure   => present,
-    provider => gem,
-    require  => Exec['ruby_1.9.3_default'],
+  class { 'razor::nodejs':
+    directory => $directory,
   }
 
   user { $username:

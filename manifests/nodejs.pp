@@ -1,11 +1,12 @@
-class razor::nodejs {
+class razor::nodejs(
+  $directory
+) {
   include nodejs
-  Class['razor::nodejs'] -> Class['razor']
 
   package { 'express':
     ensure   => present,
     provider => 'npm',
-    require  => Class['nodejs'],
+    require  => Package['npm'],
   }
 
   nodejs::npm { "${directory}:express":
