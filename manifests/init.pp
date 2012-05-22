@@ -12,6 +12,12 @@ class razor (
   $username  = 'razor',
   $directory = '/opt/razor'
 ){
+
+  include mongodb
+  include sudo
+  include 'razor::nodejs'
+  include 'razor::tftp'
+
   package { 'ruby1.9.3':
     ensure => present,
   }
@@ -36,30 +42,6 @@ class razor (
     require  => Exec['ruby_1.9.3_default'],
   }
 
-  include tftp
-
-  tftp::file { 'pxelinux.0':
-    source => 'puppet:///modules/razor/pxelinux.0',
-  }
-  tftp::file { 'pxelinux.cfg':
-    ensure => directory,
-  }
-  tftp::file { 'pxelinux.cfg/default':
-    source => 'puppet:///modules/razor/default',
-  }
-  tftp::file { 'menu.c32':
-    source => 'puppet:///modules/razor/menu.c32',
-  }
-  tftp::file { 'ipxe.iso':
-    source => 'puppet:///modules/razor/ipxe.iso',
-  }
-  tftp::file { 'ipxe.lkrn':
-    source => 'puppet:///modules/razor/ipxe.lkrn',
-  }
-  tftp::file { 'razor.ipxe':
-    content => template('razor/razor.ipxe.erb'),
-  }
-
   user { $username:
     ensure => present,
     gid    => $username,
@@ -70,19 +52,15 @@ class razor (
     ensure => present,
   }
 
-  include sudo
-
   sudo::conf { 'razor':
     priority => 10,
     content  => "${username} ALL=(root) NOPASSWD: /bin/mount, /bin/umount\n",
   }
 
-  include nodejs
-
-  package { 'express':
-    ensure   => present,
-    provider => 'npm',
-    require  => Class['nodejs'],
+  vcsrepo { $directory:
+    ensure   => latest,
+    provider => git,
+    source   => 'git://github.com/puppetlabs/Razor.git',
   }
 
   file { $directory:
@@ -93,21 +71,4 @@ class razor (
     require => Vcsrepo[$directory],
   }
 
-  vcsrepo { $directory:
-    ensure   => latest,
-    provider => git,
-    source   => 'git://github.com/puppetlabs/Razor.git',
-  }
-
-  nodejs::npm { "${directory}:express":
-    ensure   => present,
-    require  => File[$directory],
-  }
-
-  nodejs::npm { "${directory}:mime":
-    ensure   => present,
-    require  => File[$directory],
-  }
-
-  include mongodb
 }
