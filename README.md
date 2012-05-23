@@ -1,6 +1,6 @@
 # Razor Module
 
-Puppet Razor module will perform the installation of Razor on Debian Wheezy system.
+Puppet Razor module will perform the installation of Razor on Ubuntu Precise system.
 
 ## Installation
 
