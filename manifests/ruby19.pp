@@ -8,7 +8,7 @@ class razor::ruby19 {
       package { 'ruby-switch':
         ensure => present,
       }
-    
+
       # The command passes --set 1.9.1, but actually sets to 1.9.3:
       exec { 'ruby_1.9.3_default':
         command     => 'ruby-switch --set ruby1.9.1',
@@ -43,12 +43,16 @@ class razor::ruby19 {
     require  => Package['macaddr'],
   }
 
-  package { [ 'autotest', 'base62', 'bluepill', 'bson', 'bson_ext', 
+  package { 'make':
+    ensure => present,
+  }
+
+  package { [ 'autotest', 'base62', 'bluepill', 'bson', 'bson_ext',
               'colored', 'extlib', 'json', 'logger', 'mocha', 'mongo',
               'net-ssh', 'redcarpet', 'require_all', 'rspec', 'syntax'
             ]:
     ensure   => present,
     provider => gem,
-    require  => Exec['ruby_1.9.3_default'],
+    require  => [ Exec['ruby_1.9.3_default'], Package['make'] ],
   }
 }
