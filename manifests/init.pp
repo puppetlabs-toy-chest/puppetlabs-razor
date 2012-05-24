@@ -61,4 +61,11 @@ class razor (
     require => Vcsrepo[$directory],
   }
 
+  service { 'razor':
+    ensure    => running,
+    hasstatus => true,
+    status    => "${directory}/bin/razor_daemon.rb",
+    require   => [ Class['mongodb','razor::ruby19'], File[$directory], Sudo::Conf['razor'] ],
+  }
+
 }
