@@ -16,8 +16,10 @@ class razor::ruby18 {
     require  => Package['macaddr'],
   }
 
-  package { 'make':
-    ensure => present,
+  if ! defined(Package['make']) {
+    package { 'make':
+      ensure => present,
+    }
   }
 
   package { [ 'autotest', 'base62', 'bluepill', 'bson', 'bson_ext',
@@ -26,6 +28,6 @@ class razor::ruby18 {
             ]:
     ensure   => present,
     provider => gem,
-    require  => [ Exec['ruby_1.9.3_default'], Package['make'] ],
+    require  => Package['make'],
   }
 }
