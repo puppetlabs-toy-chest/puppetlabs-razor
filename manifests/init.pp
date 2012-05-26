@@ -10,16 +10,23 @@
 #
 class razor (
   $username  = 'razor',
-  $directory = '/opt/razor'
+  $directory = '/opt/razor',
+  $ruby_version = '1.8'
 ){
 
   include mongodb
   include sudo
   include 'razor::tftp'
-  include 'razor::ruby19'
 
   Class['razor::tftp'] -> Class['razor']
-  Class['razor::ruby19'] -> Class['razor']
+
+  if $ruby_version == '1.8' {
+    include 'razor::ruby18'
+    Class['razor::ruby18'] -> Class['razor']
+  } else {
+    include 'razor::ruby19'
+    Class['razor::ruby19'] -> Class['razor']
+  }
 
   class { 'razor::nodejs':
     directory => $directory,
@@ -65,7 +72,7 @@ class razor (
     ensure    => running,
     hasstatus => true,
     status    => "${directory}/bin/razor_daemon.rb",
-    require   => [ Class['mongodb','razor::ruby19'], File[$directory], Sudo::Conf['razor'] ],
+    require   => [ Class['mongodb'], File[$directory], Sudo::Conf['razor'] ],
   }
 
 }
