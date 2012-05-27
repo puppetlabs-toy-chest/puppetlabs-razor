@@ -18,14 +18,11 @@ class razor (
   include sudo
   include 'razor::tftp'
 
+  # The relationship is here so users can deploy tftp separately.
   Class['razor::tftp'] -> Class['razor']
 
-  if $ruby_version == '1.8' {
-    include 'razor::ruby18'
-    Class['razor::ruby18'] -> Class['razor']
-  } else {
-    include 'razor::ruby19'
-    Class['razor::ruby19'] -> Class['razor']
+  class { 'razor::ruby':
+    version => $ruby_version,
   }
 
   class { 'razor::nodejs':
