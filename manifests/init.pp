@@ -9,9 +9,9 @@
 # Usage:
 #
 class razor (
-  $username  = 'razor',
-  $directory = '/opt/razor',
-  $ruby_version = '1.8'
+  $username     = 'razor',
+  $directory    = '/opt/razor',
+  $ruby_version = '1.9.3'
 ){
 
   include mongodb
@@ -23,6 +23,7 @@ class razor (
 
   class { 'razor::ruby':
     version => $ruby_version,
+    before  => Class['razor'],
   }
 
   class { 'razor::nodejs':

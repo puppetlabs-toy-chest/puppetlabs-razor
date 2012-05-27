@@ -1,9 +1,6 @@
 class razor::ruby(
-  $version = '1.8',
+  $version = '1.9.3',
 ){
-
-  Class['razor::ruby'] -> Class['razor']
-
   anchor { 'ruby': }
 
   if $version == '1.8' {
@@ -11,7 +8,7 @@ class razor::ruby(
       ensure => present,
       before => Anchor['ruby'],
     }
-  } else {
+  } elsif $version == '1.9.3' {
     package { 'ruby1.9.3':
       ensure => present,
     }
@@ -43,6 +40,8 @@ class razor::ruby(
         }
       }
     }
+  } else {
+    fail("Does not support Ruby ${version} on platform ${::operatingsystem}")
   }
 
   # Need to specify macaddr 1.5.0 since 1.6.0 went backwards in dependencies.
