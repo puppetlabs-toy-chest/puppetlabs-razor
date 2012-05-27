@@ -10,9 +10,9 @@ describe 'razor::ruby', :type => :class do
     :ensure   => 'present',
     :provider => 'gem')
   }
-  [ 'autotest', 'base62', 'bluepill', 'bson', 'bson_ext',
-    'colored', 'extlib', 'json', 'logger', 'mocha', 'mongo',
-    'net-ssh', 'redcarpet', 'require_all', 'rspec', 'syntax'
+  [ 'autotest', 'base62', 'bson', 'bson_ext', 'colored',
+    'daemons', 'json', 'logger', 'mocha', 'mongo',
+    'net-ssh', 'require_all', 'syntax'
   ].each do |pkg|
     it { should contain_package(pkg).with(
       :ensure   => 'present',

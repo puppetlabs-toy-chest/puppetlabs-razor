@@ -64,9 +64,9 @@ class razor::ruby(
     }
   }
 
-  package { [ 'autotest', 'base62', 'bluepill', 'bson', 'bson_ext',
-              'colored', 'extlib', 'json', 'logger', 'mocha', 'mongo',
-              'net-ssh', 'redcarpet', 'require_all', 'rspec', 'syntax'
+  package { [ 'autotest', 'base62', 'bson', 'bson_ext', 'colored',
+              'daemons', 'json', 'logger', 'mocha', 'mongo',
+              'net-ssh', 'require_all', 'syntax'
             ]:
     ensure   => present,
     provider => gem,
