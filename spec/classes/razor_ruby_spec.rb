@@ -35,12 +35,12 @@ describe 'razor::ruby', :type => :class do
     it { should_not contain_package('rubygems') }
   end
 
-  context 'on Debian operatingsystems for 1.8' do
+  context 'on Debian operatingsystems for 1.8.7' do
     let(:facts) do
       { :operatingsystem => 'Debian' }
     end
     let :params do
-      { :version => '1.8' }
+      { :version => '1.8.7' }
     end
     it { should contain_package('ruby') }
     it { should contain_package('rubygems') }
@@ -70,7 +70,7 @@ describe 'razor::ruby', :type => :class do
     it { should_not contain_package('rubygems') }
   end
 
-  context 'on Ubuntu operatingsystems for 1.8' do
+  context 'on Ubuntu operatingsystems for 1.8.7' do
     let(:facts) do
       { :operatingsystem => 'Ubuntu',
         :lsbdistcodename => 'precise',
@@ -78,7 +78,7 @@ describe 'razor::ruby', :type => :class do
       }
     end
     let :params do
-      { :version => '1.8' }
+      { :version => '1.8.7' }
     end
     it { should contain_package('ruby') }
     it { should contain_package('rubygems') }

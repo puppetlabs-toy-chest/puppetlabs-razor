@@ -3,7 +3,7 @@ class razor::ruby(
 ){
   anchor { 'ruby': }
 
-  if $version == '1.8' {
+  if $version == '1.8.7' {
     package { ['ruby', 'rubygems']:
       ensure => present,
       before => Anchor['ruby'],
