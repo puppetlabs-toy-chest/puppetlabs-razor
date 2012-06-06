@@ -9,17 +9,22 @@
 # Usage:
 #
 class razor (
-  $username  = 'razor',
-  $directory = '/opt/razor'
+  $username     = 'razor',
+  $directory    = '/opt/razor',
+  $ruby_version = '1.9.3'
 ){
 
   include mongodb
   include sudo
   include 'razor::tftp'
-  include 'razor::ruby19'
 
+  # The relationship is here so users can deploy tftp separately.
   Class['razor::tftp'] -> Class['razor']
-  Class['razor::ruby19'] -> Class['razor']
+
+  class { 'razor::ruby':
+    version => $ruby_version,
+    before  => Class['razor'],
+  }
 
   class { 'razor::nodejs':
     directory => $directory,
@@ -65,7 +70,7 @@ class razor (
     ensure    => running,
     hasstatus => true,
     status    => "${directory}/bin/razor_daemon.rb",
-    require   => [ Class['mongodb','razor::ruby19'], File[$directory], Sudo::Conf['razor'] ],
+    require   => [ Class['mongodb'], File[$directory], Sudo::Conf['razor'] ],
   }
 
 }
