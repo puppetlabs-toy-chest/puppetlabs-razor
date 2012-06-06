@@ -9,7 +9,7 @@ f2 version.txt
 label razor-boot
   menu label Automatic Razor Node Boot
   kernel ipxe.lkrn
-  initrd razor.ipxe
+  append initrd razor.ipxe
 
 label boot-else
   menu label Bypass Razor
