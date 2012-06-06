@@ -18,7 +18,7 @@ describe 'razor', :type => :class do
       :directory => params[:directory])
     }
     it { should include_class('razor::tftp') }
-    it { should include_class('razor::ruby19') }
+    it { should include_class('razor::ruby') }
     it { should contain_user(params[:username]).with(
       :ensure => 'present',
       :gid    => params[:username],
@@ -60,7 +60,7 @@ describe 'razor', :type => :class do
       :directory => params[:directory])
     }
     it { should include_class('razor::tftp') }
-    it { should include_class('razor::ruby19') }
+    it { should include_class('razor::ruby') }
     it { should contain_user(params[:username]).with(
       :ensure => 'present',
       :gid    => params[:username],
