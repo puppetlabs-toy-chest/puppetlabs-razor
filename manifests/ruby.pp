@@ -44,20 +44,6 @@ class razor::ruby(
     fail("Does not support Ruby ${version} on platform ${::operatingsystem}")
   }
 
-  # Need to specify macaddr 1.5.0 since 1.6.0 went backwards in dependencies.
-  package { 'macaddr':
-    ensure   => '1.5.0',
-    provider => 'gem',
-    require  => Anchor['ruby'],
-  }
-
-  # Deploy uuid after macaddr so we don't pick up 1.6.0.
-  package { 'uuid':
-    ensure   => present,
-    provider => 'gem',
-    require  => Anchor['ruby'],
-  }
-
   if ! defined(Package['make']) {
     package { 'make':
       ensure => present,
@@ -65,8 +51,8 @@ class razor::ruby(
   }
 
   package { [ 'autotest', 'base62', 'bson', 'bson_ext', 'colored',
-              'daemons', 'json', 'logger', 'mocha', 'mongo',
-              'net-ssh', 'require_all', 'syntax'
+              'daemons', 'json', 'logger', 'macaddr', 'mocha', 'mongo',
+              'net-ssh', 'require_all', 'syntax', 'uuid'
             ]:
     ensure   => present,
     provider => gem,
