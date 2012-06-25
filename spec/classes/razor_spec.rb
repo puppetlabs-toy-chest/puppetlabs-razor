@@ -45,6 +45,13 @@ describe 'razor', :type => :class do
       :owner  => params[:username],
       :group  => params[:username])
     }
+    it { should contain_service('razor').with(
+      :ensure => 'running',
+      :hasstatus => true,
+      :status => "/var/lib/razor/bin/razor_daemon.rb",
+      :require => ['Class[Mongodb]', 'File[/var/lib/razor]', 'Sudo::Conf[razor]'],
+      :subscribe => "Vcsrepo[#{params[:directory]}]" )
+    }
   end
 
   # Tests for Ubuntu
@@ -86,6 +93,13 @@ describe 'razor', :type => :class do
       :mode   => '0755',
       :owner  => params[:username],
       :group  => params[:username])
+    }
+    it { should contain_service('razor').with(
+      :ensure => 'running',
+      :hasstatus => true,
+      :status => "/var/lib/razor/bin/razor_daemon.rb",
+      :require => ['Class[Mongodb]', 'File[/var/lib/razor]', 'Sudo::Conf[razor]'],
+      :subscribe => "Vcsrepo[#{params[:directory]}]" )
     }
   end
 
