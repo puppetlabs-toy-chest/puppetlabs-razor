@@ -21,10 +21,12 @@ describe 'razor::ruby', :type => :class do
     let :params do
       { :version => '1.9.3' }
     end
-    it { should contain_package('ruby-switch') }
-    it { should contain_package('ruby1.9.3') }
-    it { should_not contain_package('ruby') }
-    it { should_not contain_package('rubygems') }
+    it {
+      should contain_package('ruby-switch')
+      should contain_package('ruby1.9.3')
+      should_not contain_package('ruby')
+      should_not contain_package('rubygems')
+    }
   end
 
   context 'on Debian operatingsystems for 1.8.7' do
@@ -34,10 +36,12 @@ describe 'razor::ruby', :type => :class do
     let :params do
       { :version => '1.8.7' }
     end
-    it { should contain_package('ruby') }
-    it { should contain_package('rubygems') }
-    it { should_not contain_package('ruby1.9.3') }
-    it { should_not contain_exec('ruby_1.9.3_default') }
+    it {
+      should contain_package('ruby')
+      should contain_package('rubygems')
+      should_not contain_package('ruby1.9.3')
+      should_not contain_exec('ruby_1.9.3_default')
+    }
   end
 
   # Tests for Ubuntu
@@ -51,15 +55,17 @@ describe 'razor::ruby', :type => :class do
     let :params do
       { :version => '1.9.3' }
     end
-    it { should contain_package('ruby1.9.3') }
-    it { should contain_exec('ruby_1.9.3_default').with(
-      :command    => 'update-alternatives --set ruby /usr/bin/ruby1.9.1 && update-alternatives --set gem /usr/bin/gem1.9.1',
-      :path       => facts[:path],
-      :unless     => 'ruby --version | grep "ruby 1.9"',
-      :provider   => 'shell')
+    it {
+      should contain_package('ruby1.9.3')
+      should contain_exec('ruby_1.9.3_default').with(
+        :command    => 'update-alternatives --set ruby /usr/bin/ruby1.9.1 && update-alternatives --set gem /usr/bin/gem1.9.1',
+        :path       => facts[:path],
+        :unless     => 'ruby --version | grep "ruby 1.9"',
+        :provider   => 'shell'
+      )
+      should_not contain_package('ruby')
+      should_not contain_package('rubygems')
     }
-    it { should_not contain_package('ruby') }
-    it { should_not contain_package('rubygems') }
   end
 
   context 'on Ubuntu operatingsystems for 1.8.7' do
@@ -72,9 +78,11 @@ describe 'razor::ruby', :type => :class do
     let :params do
       { :version => '1.8.7' }
     end
-    it { should contain_package('ruby') }
-    it { should contain_package('rubygems') }
-    it { should_not contain_package('ruby1.9.3') }
-    it { should_not contain_exec('ruby_1.9.3_default') }
+    it {
+      should contain_package('ruby')
+      should contain_package('rubygems')
+      should_not contain_package('ruby1.9.3')
+      should_not contain_exec('ruby_1.9.3_default')
+    }
   end
 end

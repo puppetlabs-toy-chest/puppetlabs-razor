@@ -10,13 +10,15 @@ describe 'razor::nodejs', :type => :class do
     let(:facts) do
       { :operatingsystem => 'Debian' }
     end
-    it { should contain_package('express').with(
-      :ensure   => 'present',
-      :provider => 'npm')
+    it {
+      should contain_package('express').with(
+        :ensure   => 'present',
+        :provider => 'npm'
+      )
+      should include_class('nodejs')
+      should contain_nodejs__npm("#{params[:directory]}:express")
+      should contain_nodejs__npm("#{params[:directory]}:mime")
     }
-    it { should include_class('nodejs') }
-    it { should contain_nodejs__npm("#{params[:directory]}:express") }
-    it { should contain_nodejs__npm("#{params[:directory]}:mime") }
   end
 
   # Tests for Ubuntu
@@ -26,13 +28,15 @@ describe 'razor::nodejs', :type => :class do
         :lsbdistcodename => 'precise'
       }
     end
-    it { should contain_package('express').with(
-      :ensure   => 'present',
-      :provider => 'npm')
+    it {
+      should contain_package('express').with(
+        :ensure   => 'present',
+        :provider => 'npm'
+      )
+      should include_class('nodejs')
+      should contain_nodejs__npm("#{params[:directory]}:express")
+      should contain_nodejs__npm("#{params[:directory]}:mime") 
     }
-    it { should include_class('nodejs') }
-    it { should contain_nodejs__npm("#{params[:directory]}:express") }
-    it { should contain_nodejs__npm("#{params[:directory]}:mime") }
   end
 
   # Tests for RedHat
@@ -40,13 +44,15 @@ describe 'razor::nodejs', :type => :class do
     let(:facts) do
       { :operatingsystem => 'RedHat' }
     end
-    it { should contain_package('express').with(
-      :ensure   => 'present',
-      :provider => 'npm')
+    it {
+      should contain_package('express').with(
+        :ensure   => 'present',
+        :provider => 'npm'
+      )
+      should include_class('nodejs')
+      should contain_nodejs__npm("#{params[:directory]}:express")
+      should contain_nodejs__npm("#{params[:directory]}:mime")
     }
-    it { should include_class('nodejs') }
-    it { should contain_nodejs__npm("#{params[:directory]}:express") }
-    it { should contain_nodejs__npm("#{params[:directory]}:mime") }
   end
 
   # Tests for an unsupported OS (Darwin)
