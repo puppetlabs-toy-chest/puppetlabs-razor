@@ -71,6 +71,7 @@ class razor (
     hasstatus => true,
     status    => "${directory}/bin/razor_daemon.rb",
     require   => [ Class['mongodb'], File[$directory], Sudo::Conf['razor'] ],
+    subscribe => Vcsrepo[$directory],
   }
 
 }
