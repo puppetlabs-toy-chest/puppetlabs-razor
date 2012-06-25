@@ -1,3 +1,9 @@
+# Class: razor::nodejs
+#
+# Actions:
+#
+#   Manages nodejs and npm package for razor.
+#
 class razor::nodejs(
   $directory
 ) {

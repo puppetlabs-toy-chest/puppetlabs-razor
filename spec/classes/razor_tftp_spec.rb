@@ -9,26 +9,25 @@ describe 'razor::tftp', :type => :class do
       }
     end
     it { should include_class('tftp') }
-    it { should contain_tftp__file('pxelinux.0').with(
+    it { should contain_file('/srv/tftp/pxelinux.0').with(
       :source => 'puppet:///modules/razor/pxelinux.0')
     }
-    it { should contain_tftp__file('pxelinux.cfg').with(
-      :ensure => 'directory')
+    it { should contain_file('/srv/tftp/pxelinux.cfg').with(
+      :ensure => 'directory',
+      :source  => 'puppet:///modules/razor/pxelinux.cfg',
+      :recurse => true)
     }
-    it { should contain_tftp__file('pxelinux.cfg/default').with(
-      :source => 'puppet:///modules/razor/default')
-    }
-    it { should contain_tftp__file('menu.c32').with(
+    it { should contain_file('/srv/tftp/menu.c32').with(
       :source => 'puppet:///modules/razor/menu.c32')
     }
-    it { should contain_tftp__file('ipxe.iso').with(
+    it { should contain_file('/srv/tftp/ipxe.iso').with(
       :source => 'puppet:///modules/razor/ipxe.iso')
     }
-    it { should contain_tftp__file('ipxe.lkrn').with(
+    it { should contain_file('/srv/tftp/ipxe.lkrn').with(
       :source => 'puppet:///modules/razor/ipxe.lkrn')
     }
-    it { should contain_tftp__file('razor.ipxe').with(
-      :content => /http:\/\/#{facts[:ipaddress]}:8026\/razor\/api\/boot\?mac=\$\{net0\/mac\}/)
+    it { should contain_file('/srv/tftp/razor.ipxe').with(
+      :content => /http:\/\/#{facts[:ipaddress]}:8026\/razor\/api\/boot\?hw_id=\$\{net0\/mac\}/)
     }
   end
 
@@ -40,26 +39,25 @@ describe 'razor::tftp', :type => :class do
       }
     end
     it { should include_class('tftp') }
-    it { should contain_tftp__file('pxelinux.0').with(
+    it { should contain_file('/var/lib/tftpboot/pxelinux.0').with(
       :source => 'puppet:///modules/razor/pxelinux.0')
     }
-    it { should contain_tftp__file('pxelinux.cfg').with(
-      :ensure => 'directory')
+    it { should contain_file('/var/lib/tftpboot/pxelinux.cfg').with(
+      :ensure  => 'directory',
+      :source  => 'puppet:///modules/razor/pxelinux.cfg',
+      :recurse => true)
     }
-    it { should contain_tftp__file('pxelinux.cfg/default').with(
-      :source => 'puppet:///modules/razor/default')
-    }
-    it { should contain_tftp__file('menu.c32').with(
+    it { should contain_file('/var/lib/tftpboot/menu.c32').with(
       :source => 'puppet:///modules/razor/menu.c32')
     }
-    it { should contain_tftp__file('ipxe.iso').with(
+    it { should contain_file('/var/lib/tftpboot/ipxe.iso').with(
       :source => 'puppet:///modules/razor/ipxe.iso')
     }
-    it { should contain_tftp__file('ipxe.lkrn').with(
+    it { should contain_file('/var/lib/tftpboot/ipxe.lkrn').with(
       :source => 'puppet:///modules/razor/ipxe.lkrn')
     }
-    it { should contain_tftp__file('razor.ipxe').with(
-      :content => /http:\/\/#{facts[:ipaddress]}:8026\/razor\/api\/boot\?mac=\$\{net0\/mac\}/)
+    it { should contain_file('/var/lib/tftpboot/razor.ipxe').with(
+      :content => /http:\/\/#{facts[:ipaddress]}:8026\/razor\/api\/boot\?hw_id=\$\{net0\/mac\}/)
     }
   end
 
@@ -71,26 +69,25 @@ describe 'razor::tftp', :type => :class do
       }
     end
     it { should include_class('tftp') }
-    it { should contain_tftp__file('pxelinux.0').with(
+    it { should contain_file('/var/lib/tftpboot/pxelinux.0').with(
       :source => 'puppet:///modules/razor/pxelinux.0')
     }
-    it { should contain_tftp__file('pxelinux.cfg').with(
-      :ensure => 'directory')
+    it { should contain_file('/var/lib/tftpboot/pxelinux.cfg').with(
+      :ensure => 'directory',
+      :source  => 'puppet:///modules/razor/pxelinux.cfg',
+      :recurse => true)
     }
-    it { should contain_tftp__file('pxelinux.cfg/default').with(
-      :source => 'puppet:///modules/razor/default')
-    }
-    it { should contain_tftp__file('menu.c32').with(
+    it { should contain_file('/var/lib/tftpboot/menu.c32').with(
       :source => 'puppet:///modules/razor/menu.c32')
     }
-    it { should contain_tftp__file('ipxe.iso').with(
+    it { should contain_file('/var/lib/tftpboot/ipxe.iso').with(
       :source => 'puppet:///modules/razor/ipxe.iso')
     }
-    it { should contain_tftp__file('ipxe.lkrn').with(
+    it { should contain_file('/var/lib/tftpboot/ipxe.lkrn').with(
       :source => 'puppet:///modules/razor/ipxe.lkrn')
     }
-    it { should contain_tftp__file('razor.ipxe').with(
-      :content => /http:\/\/#{facts[:ipaddress]}:8026\/razor\/api\/boot\?mac=\$\{net0\/mac\}/)
+    it { should contain_file('/var/lib/tftpboot/razor.ipxe').with(
+      :content => /http:\/\/#{facts[:ipaddress]}:8026\/razor\/api\/boot\?hw_id=\$\{net0\/mac\}/)
     }
   end
 end

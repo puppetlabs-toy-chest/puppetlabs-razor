@@ -1,3 +1,19 @@
+# Class: razor::ruby
+#
+# Parameters:
+#
+#   [*version*]: Ruby version.
+#
+# Actions:
+#
+#   Manage ruby for razor.
+#
+# Usage:
+#
+#   class { 'razor::ruby':
+#     version => '1.8.7',
+#   }
+#
 class razor::ruby(
   $version = '1.9.3',
 ){
