@@ -2,17 +2,9 @@ require 'spec_helper'
 
 describe 'razor::ruby', :type => :class do
   it { should contain_package('make') }
-  it { should contain_package('macaddr').with(
-    :ensure   => '1.5.0',
-    :provider => 'gem')
-  }
-  it { should contain_package('uuid').with(
-    :ensure   => 'present',
-    :provider => 'gem')
-  }
   [ 'autotest', 'base62', 'bson', 'bson_ext', 'colored',
-    'daemons', 'json', 'logger', 'mocha', 'mongo',
-    'net-ssh', 'require_all', 'syntax'
+    'daemons', 'json', 'logger', 'macaddr', 'mocha', 'mongo',
+    'net-ssh', 'require_all', 'syntax', 'uuid'
   ].each do |pkg|
     it { should contain_package(pkg).with(
       :ensure   => 'present',
