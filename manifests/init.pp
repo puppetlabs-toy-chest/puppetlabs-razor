@@ -2,11 +2,29 @@
 #
 # Parameters:
 #
+#   [*usename*]: daemon service account, default razor.
+#   [*directory*]: installation directory, default /opt/razor.
+#   [*ruby_version]: Ruby version, support 1.8.7 and 1.9.3, default 1.9.3.
+#
 # Actions:
+#
+#   Manages razor and it's dependencies ruby, nodejs, mongodb, tftp, and sudo.
 #
 # Requires:
 #
+#   * [apt module](https://github.com/puppetlabs/puppetlabs-apt)
+#   * [Mongodb module](https://github.com/puppetlabs/puppetlabs-mongodb)
+#   * [Node.js module](https://github.com/puppetlabs/puppetlabs-nodejs)
+#   * [stdlib module](https://github.com/puppetlabs/puppetlabs-stdlib)
+#   * [tftp module](https://github.com/puppetlabs/puppetlabs-tftp)
+#   * [sudo module](https://github.com/saz/puppet-sudo)
+#
 # Usage:
+#
+#   class { 'razor':
+#     directory    => '/usr/local/razor',
+#     ruby_version => '1.8.7',
+#   }
 #
 class razor (
   $username     = 'razor',
@@ -72,5 +90,4 @@ class razor (
     status    => "${directory}/bin/razor_daemon.rb",
     require   => [ Class['mongodb'], File[$directory], Sudo::Conf['razor'] ],
   }
-
 }
