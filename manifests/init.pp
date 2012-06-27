@@ -73,7 +73,7 @@ class razor (
   vcsrepo { $directory:
     ensure   => latest,
     provider => git,
-    source   => 'git://github.com/puppetlabs/Razor.git',
+    source   => 'http://github.com/puppetlabs/Razor.git',
   }
 
   file { $directory:
