@@ -16,7 +16,7 @@ class razor::nodejs(
   }
 
   nodejs::npm { "${directory}:express":
-    ensure   => present,
+    ensure   => '2.5.11',
     require  => File[$directory],
   }
 
