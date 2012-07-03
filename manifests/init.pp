@@ -87,8 +87,10 @@ class razor (
   service { 'razor':
     ensure    => running,
     hasstatus => true,
-    status    => "${directory}/bin/razor_daemon.rb",
+    status    => "${directory}/bin/razor_daemon.rb status",
+    start     => "${directory}/bin/razor_daemon.rb start",
+    stop      => "${directory}/bin/razor_daemon.rb stop",
     require   => [ Class['mongodb'], File[$directory], Sudo::Conf['razor'] ],
-    subscribe => Vcsrepo[$directory],
+    subscribe => [ Class['razor::nodejs'], Vcsrepo[$directory] ],
   }
 }
