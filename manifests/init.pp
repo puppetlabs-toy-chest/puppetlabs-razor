@@ -86,6 +86,7 @@ class razor (
 
   service { 'razor':
     ensure    => running,
+    provider  => base,
     hasstatus => true,
     status    => "${directory}/bin/razor_daemon.rb status",
     start     => "${directory}/bin/razor_daemon.rb start",
