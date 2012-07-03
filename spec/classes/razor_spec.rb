@@ -47,9 +47,11 @@ describe 'razor', :type => :class do
       should contain_service('razor').with(
         :ensure => 'running',
         :hasstatus => true,
-        :status => "/var/lib/razor/bin/razor_daemon.rb",
+        :status => "/var/lib/razor/bin/razor_daemon.rb status",
+        :start => "/var/lib/razor/bin/razor_daemon.rb start",
+        :stop => "/var/lib/razor/bin/razor_daemon.rb stop",
         :require => ['Class[Mongodb]', 'File[/var/lib/razor]', 'Sudo::Conf[razor]'],
-        :subscribe => "Vcsrepo[#{params[:directory]}]"
+        :subscribe => ['Class[Razor::Nodejs]', "Vcsrepo[#{params[:directory]}]"]
       )
     }
   end
@@ -98,9 +100,11 @@ describe 'razor', :type => :class do
       should contain_service('razor').with(
         :ensure => 'running',
         :hasstatus => true,
-        :status => "/var/lib/razor/bin/razor_daemon.rb",
+        :status => "/var/lib/razor/bin/razor_daemon.rb status",
+        :start => "/var/lib/razor/bin/razor_daemon.rb start",
+        :stop => "/var/lib/razor/bin/razor_daemon.rb stop",
         :require => ['Class[Mongodb]', 'File[/var/lib/razor]', 'Sudo::Conf[razor]'],
-        :subscribe => "Vcsrepo[#{params[:directory]}]"
+        :subscribe => ['Class[Razor::Nodejs]', 'Vcsrepo[/var/lib/razor]']
       )
     }
   end
