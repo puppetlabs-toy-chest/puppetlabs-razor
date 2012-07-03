@@ -16,12 +16,13 @@ class razor::nodejs(
   }
 
   nodejs::npm { "${directory}:express":
-    ensure   => '2.5.11',
-    require  => File[$directory],
+    ensure  => present,
+    version => '2.5.11',
+    require => File[$directory],
   }
 
   nodejs::npm { "${directory}:mime":
-    ensure   => present,
-    require  => File[$directory],
+    ensure  => present,
+    require => File[$directory],
   }
 }
