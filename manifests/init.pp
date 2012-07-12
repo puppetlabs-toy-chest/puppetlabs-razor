@@ -32,9 +32,12 @@ class razor (
   $ruby_version = '1.9.3'
 ){
 
-  include mongodb
   include sudo
   include 'razor::tftp'
+
+  class { 'mongodb':
+    enable_10gen => true,
+  }
 
   # The relationship is here so users can deploy tftp separately.
   Class['razor::tftp'] -> Class['razor']
