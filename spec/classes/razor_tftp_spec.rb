@@ -4,7 +4,8 @@ describe 'razor::tftp', :type => :class do
   # Tests for Debian
   context 'on Debian operatingsystems' do
     let(:facts) do
-      { :operatingsystem => 'Debian',
+      { :osfamily        => 'Debian',
+        :operatingsystem => 'Debian',
         :ipaddress       => '10.13.1.3'
       }
     end
@@ -36,7 +37,8 @@ describe 'razor::tftp', :type => :class do
   # Tests for Ubuntu
   context 'on Ubuntu operatingsystems' do
     let(:facts) do
-      { :operatingsystem => 'Ubuntu',
+      { :osfamily        => 'Debian',
+        :operatingsystem => 'Ubuntu',
         :lsbdistcodename => 'precise'
       }
     end
@@ -68,7 +70,8 @@ describe 'razor::tftp', :type => :class do
   # Tests on RedHat
   context 'on RedHat operatingsystems' do
     let(:facts) do
-      { :operatingsystem => 'RedHat',
+      { :osfamily        => 'RedHat',
+        :operatingsystem => 'RedHat',
         :ipaddress       => '10.13.1.3'
       }
     end
