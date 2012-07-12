@@ -29,7 +29,8 @@
 class razor (
   $username     = 'razor',
   $directory    = '/opt/razor',
-  $ruby_version = '1.9.3'
+  $ruby_version = '1.9.3',
+  $address      = $::ipaddress
 ){
 
   include sudo
