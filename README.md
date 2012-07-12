@@ -40,6 +40,9 @@ Puppet apply, apply test manifests:
 Puppet master, add razor class to target node:
 
     node razor_system {
+      class { 'sudo':
+        config_file_replace => false,
+      }
       include razor
     }
 
