@@ -28,9 +28,6 @@ describe 'razor::tftp', :type => :class do
       should contain_file('/srv/tftp/ipxe.lkrn').with(
         :source => 'puppet:///modules/razor/ipxe.lkrn'
       )
-      should contain_file('/srv/tftp/razor.ipxe').with(
-        :content => /http:\/\/#{facts[:ipaddress]}:8026\/razor\/api\/boot\?hw_id=\$\{net0\/mac\}/
-      )
     }
   end
 
@@ -61,9 +58,6 @@ describe 'razor::tftp', :type => :class do
       should contain_file('/var/lib/tftpboot/ipxe.lkrn').with(
         :source => 'puppet:///modules/razor/ipxe.lkrn'
       )
-      should contain_file('/var/lib/tftpboot/razor.ipxe').with(
-        :content => /http:\/\/#{facts[:ipaddress]}:8026\/razor\/api\/boot\?hw_id=\$\{net0\/mac\}/
-      )
     }
   end
 
@@ -93,9 +87,6 @@ describe 'razor::tftp', :type => :class do
       )
       should contain_file('/var/lib/tftpboot/ipxe.lkrn').with(
         :source => 'puppet:///modules/razor/ipxe.lkrn'
-      )
-      should contain_file('/var/lib/tftpboot/razor.ipxe').with(
-        :content => /http:\/\/#{facts[:ipaddress]}:8026\/razor\/api\/boot\?hw_id=\$\{net0\/mac\}/
       )
     }
   end
