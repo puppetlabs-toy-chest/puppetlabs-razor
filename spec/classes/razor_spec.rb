@@ -7,10 +7,10 @@ describe 'razor', :type => :class do
     }
   end
 
-  # Tests for Debian
   context 'on Debian operatingsystems' do
     let(:facts) do
-      { :operatingsystem => 'Debian' }
+      { :osfamily        => 'Debian',
+        :operatingsystem => 'Debian' }
     end
     it {
       should include_class('mongodb')
@@ -56,10 +56,10 @@ describe 'razor', :type => :class do
     }
   end
 
-  # Tests for Ubuntu
   context 'on Ubuntu operatingsystems' do
     let(:facts) do
-      { :operatingsystem => 'Ubuntu',
+      { :osfamily        => 'Debian',
+        :operatingsystem => 'Ubuntu',
         :lsbdistcodename => 'precise'
       }
     end
@@ -109,15 +109,12 @@ describe 'razor', :type => :class do
     }
   end
 
-  # Tests for RedHat
-  context 'on Ubuntu operatingsystems' do
+  context 'on RedHat operatingsystems' do
     let(:facts) do
-      { :operatingsystem => 'RedHat' }
+      { :osfamily        => 'RedHat',
+        :operatingsystem => 'RedHat' }
     end
     it do
-      expect {
-        should include_class('mongodb')
-      }.to raise_error(Puppet::Error, /operatingsystem #{facts[:operatingsystem]} is not supported/)
     end
   end
 end
