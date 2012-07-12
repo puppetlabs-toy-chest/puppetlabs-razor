@@ -50,12 +50,10 @@ Puppet master, add razor class to target node:
 
 * username: razor daemon username, default: razor.
 * directory; installation target directory, default: /opt/razor.
-* ruby_version: ruby version, supports 1.8.7 and 1.9.3, default: 1.9.3.
 * address: razor.ipxe chain address, default: facter ipaddress.
 
     class { 'razor':
       directory    => '/usr/local/razor',
-      ruby_version => '1.8.7',
     }
 
 ## Usage

@@ -23,30 +23,25 @@
 #
 #   class { 'razor':
 #     directory    => '/usr/local/razor',
-#     ruby_version => '1.8.7',
 #   }
 #
 class razor (
-  $username     = 'razor',
-  $directory    = '/opt/razor',
-  $ruby_version = '1.9.3',
-  $address      = $::ipaddress
+  $username  = 'razor',
+  $directory = '/opt/razor',
+  $address   = $::ipaddress
 ){
 
   include sudo
+  include 'razor::ruby'
   include 'razor::tftp'
 
   class { 'mongodb':
     enable_10gen => true,
   }
 
+  Class['razor::ruby'] -> Class['razor']
   # The relationship is here so users can deploy tftp separately.
   Class['razor::tftp'] -> Class['razor']
-
-  class { 'razor::ruby':
-    version => $ruby_version,
-    before  => Class['razor'],
-  }
 
   class { 'razor::nodejs':
     directory => $directory,
