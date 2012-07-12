@@ -10,7 +10,9 @@ describe 'razor', :type => :class do
   context 'on Debian operatingsystems' do
     let(:facts) do
       { :osfamily        => 'Debian',
-        :operatingsystem => 'Debian' }
+        :operatingsystem => 'Debian',
+        :ipaddress       => '10.13.1.3'
+      }
     end
     it {
       should include_class('mongodb')
@@ -19,6 +21,9 @@ describe 'razor', :type => :class do
         :directory => params[:directory]
       )
       should include_class('razor::tftp')
+      should contain_file('/srv/tftp/razor.ipxe').with(
+        :content => /http:\/\/#{facts[:ipaddress]}:8026\/razor\/api\/boot\?hw_id=\$\{net0\/mac\}/
+      )
       should include_class('razor::ruby')
       should contain_user(params[:username]).with(
         :ensure => 'present',
@@ -70,6 +75,9 @@ describe 'razor', :type => :class do
         :directory => params[:directory]
       )
       should include_class('razor::tftp')
+      should contain_file('/var/lib/tftpboot/razor.ipxe').with(
+        :content => /http:\/\/#{facts[:ipaddress]}:8026\/razor\/api\/boot\?hw_id=\$\{net0\/mac\}/
+      )
       should include_class('razor::ruby')
       should contain_user(params[:username]).with(
         :ensure => 'present',
