@@ -83,14 +83,19 @@ class razor (
     require => Vcsrepo[$directory],
   }
 
+  file {'/etc/init.d/razor':
+    ensure => present,
+    mode   => '0755',
+    owner  => 'root',
+    group  => 'root',
+    content => template("razor/razor.erb"),
+    require  => [ File[$directory], Sudo::Conf['razor'] ],
+  }
+
   service { 'razor':
     ensure    => running,
-    provider  => base,
     hasstatus => true,
-    status    => "${directory}/bin/razor_daemon.rb status",
-    start     => "${directory}/bin/razor_daemon.rb start",
-    stop      => "${directory}/bin/razor_daemon.rb stop",
-    require   => [ Class['mongodb'], File[$directory], Sudo::Conf['razor'] ],
+    require   => [ File['/etc/init.d/razor'], Class['mongodb'] ],
     subscribe => [ Class['razor::nodejs'], Vcsrepo[$directory] ],
   }
 }

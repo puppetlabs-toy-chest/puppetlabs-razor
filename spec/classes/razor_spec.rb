@@ -47,15 +47,21 @@ describe 'razor', :type => :class do
         :ensure => 'directory',
         :mode   => '0755',
         :owner  => params[:username],
-        :group  => params[:username]
+        :group  => params[:username],
+        :require =>"Vcsrepo[#{params[:directory]}]"
+      )
+      should contain_file('/etc/init.d/razor').with(
+        :ensure => 'present',
+        :mode   => '0755',
+        :owner  => 'root',
+        :group  => 'root',
+        :require => [ "File[#{params[:directory]}]", 'Sudo::Conf[razor]' ],
+        :content => /DAEMON=#{params[:directory]}\/bin\/razor_daemon.rb/
       )
       should contain_service('razor').with(
         :ensure => 'running',
         :hasstatus => true,
-        :status => "/var/lib/razor/bin/razor_daemon.rb status",
-        :start => "/var/lib/razor/bin/razor_daemon.rb start",
-        :stop => "/var/lib/razor/bin/razor_daemon.rb stop",
-        :require => ['Class[Mongodb]', 'File[/var/lib/razor]', 'Sudo::Conf[razor]'],
+        :require => [ 'File[/etc/init.d/razor]', 'Class[Mongodb]' ],
         :subscribe => ['Class[Razor::Nodejs]', "Vcsrepo[#{params[:directory]}]"]
       )
     }
@@ -103,15 +109,20 @@ describe 'razor', :type => :class do
         :ensure => 'directory',
         :mode   => '0755',
         :owner  => params[:username],
-        :group  => params[:username]
+        :group  => params[:username],
+        :require =>"Vcsrepo[#{params[:directory]}]"
+      )
+      should contain_file('/etc/init.d/razor').with(
+        :ensure => 'present',
+        :mode   => '0755',
+        :owner  => 'root',
+        :group  => 'root',
+        :require => [ "File[#{params[:directory]}]", 'Sudo::Conf[razor]' ]
       )
       should contain_service('razor').with(
         :ensure => 'running',
         :hasstatus => true,
-        :status => "/var/lib/razor/bin/razor_daemon.rb status",
-        :start => "/var/lib/razor/bin/razor_daemon.rb start",
-        :stop => "/var/lib/razor/bin/razor_daemon.rb stop",
-        :require => ['Class[Mongodb]', 'File[/var/lib/razor]', 'Sudo::Conf[razor]'],
+        :require => [ 'File[/etc/init.d/razor]', 'Class[Mongodb]' ],
         :subscribe => ['Class[Razor::Nodejs]', 'Vcsrepo[/var/lib/razor]']
       )
     }
