@@ -23,27 +23,27 @@ export PATH="${PATH:+$PATH:}/usr/sbin:/sbin"
 
 case "$1" in
   start)
-	    log_daemon_msg "Starting razor daemon" "razor"
-		$DAEMON start
-	;;
+        log_daemon_msg "Starting razor daemon" "razor"
+        $DAEMON start
+    ;;
   stop)
-		log_daemon_msg "Stopping razor daemon" "razor"
-		$DAEMON stop
-		log_end_msg $?
-	;;
+        log_daemon_msg "Stopping razor daemon" "razor"
+        $DAEMON stop
+        log_end_msg $?
+    ;;
   restart)
-		set +e
-	    log_daemon_msg "Restarting razor daemon" "razor"
-		$DAEMON stop
-		sleep 1
-		$DAEMON start
-	;;
+        set +e
+        log_daemon_msg "Restarting razor daemon" "razor"
+        $DAEMON stop
+        sleep 1
+        $DAEMON start
+    ;;
    status)
-   		$DAEMON status 
-	;;
+        $DAEMON status 
+    ;;
   *)
-	echo "Usage: /etc/init.d/razor {start|stop|restart|status}"
-	exit 1
+    echo "Usage: /etc/init.d/razor {start|stop|restart|status}"
+    exit 1
 esac
 
 exit 0
