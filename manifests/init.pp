@@ -4,7 +4,8 @@
 #
 #   [*usename*]: daemon service account, default razor.
 #   [*directory*]: installation directory, default /opt/razor.
-#   [*mk_source*]: Razor tinycore linux mk iso file.
+#   [*mk_name*]: Razor tinycore linux mk name.
+#   [*mk_source*]: Razor tinycore linux mk iso file source (local or http).
 #
 # Actions:
 #
@@ -29,6 +30,7 @@ class razor (
   $username  = 'razor',
   $directory = '/opt/razor',
   $address   = $::ipaddress,
+  $mk_name   = 'rz_mk_prod-image.0.9.0.4.iso',
   $mk_source = 'https://github.com/downloads/puppetlabs/Razor-Microkernel/rz_mk_prod-image.0.9.0.4.iso'
 ) {
 
@@ -110,7 +112,7 @@ class razor (
     }
   }
 
-  rz_image { $mk_iso:
+  rz_image { $mk_name:
     ensure  => present,
     type    => 'mk',
     source  => $mk_source,

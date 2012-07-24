@@ -61,6 +61,7 @@ Puppet master, add razor class to target node:
 
     class { 'razor':
       directory => '/usr/local/razor',
+      mk_name   => 'rz_mk_custom-image.0.9.0.4.iso',
       mk_source => '/var/tmp/custom_mk.iso',
       require   => File['custom_mk.iso'],
     }
