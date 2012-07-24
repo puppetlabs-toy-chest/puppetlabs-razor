@@ -1,3 +1,10 @@
+2012-07-23 Puppet Labs <info@puppetlabs.com> - 0.2.0
+* Add support for RHEL family.
+* Add rz_image type/provider.
+* Use updated version of mongodb.
+* Move ruby dependencies to puppetlabs-ruby module.
+* Update tests manifests to not overwrite sudoer.
+
 2012-07-02 Puppet Labs <info@puppetlabs.com> - 0.1.4
 * Use http:// instead of git:// for repo.
 * git repo update trigger razor service refresh.
