@@ -1,3 +1,6 @@
+2012-07-23 Puppet Labs <info@puppetlabs.com> - 0.2.1
+* Fix rz_image bug due to last minute changes.
+
 2012-07-23 Puppet Labs <info@puppetlabs.com> - 0.2.0
 * Add support for RHEL family.
 * Add rz_image type/provider.
