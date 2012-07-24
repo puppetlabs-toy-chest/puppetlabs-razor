@@ -96,11 +96,11 @@ class razor (
   }
 
   file { '/usr/local/bin/razor':
-    ensure  => symlink,
+    ensure  => file,
     owner   => '0',
     group   => '0',
     mode    => '0755',
-    target  => "${directory}/bin/razor",
+    content => template('razor/razor'),
     require => Vcsrepo[$directory],
   }
 

@@ -15,8 +15,12 @@ Puppet::Type.type(:rz_image).provide(:default) do
 
   def self.instances
     razor_images = Array.new
-    images = razor 'image', 'get'
-    images = images.split("\n\n").collect{ |x| Hash[*(x.split(/\n|=>/) - ['Images']).collect{|y| y.strip!}] }
+    begin
+      images = razor 'image', 'get'
+      images = images.split("\n\n").collect{ |x| Hash[*(x.split(/\n|=>/) - ['Images']).collect{|y| y.strip!}] }
+    rescue
+      images = {}
+    end
 
     images.each do |i|
       image = {
