@@ -4,7 +4,7 @@
 #
 #   [*usename*]: daemon service account, default razor.
 #   [*directory*]: installation directory, default /opt/razor.
-#   [*ruby_version]: Ruby version, support 1.8.7 and 1.9.3, default 1.9.3.
+#   [*mk_source*]: Razor tinycore linux mk iso file.
 #
 # Actions:
 #
@@ -28,8 +28,9 @@
 class razor (
   $username  = 'razor',
   $directory = '/opt/razor',
-  $address   = $::ipaddress
-){
+  $address   = $::ipaddress,
+  $mk_source = 'https://github.com/downloads/puppetlabs/Razor-Microkernel/rz_mk_prod-image.0.9.0.4.iso'
+) {
 
   include sudo
   include 'razor::ruby'
@@ -65,7 +66,6 @@ class razor (
   if ! defined(Package['git']) {
     package { 'git':
       ensure => present,
-      before => Vcsrepo[$directory],
     }
   }
 
@@ -73,6 +73,7 @@ class razor (
     ensure   => latest,
     provider => git,
     source   => 'http://github.com/puppetlabs/Razor.git',
+    require  => Package['git'],
   }
 
   file { $directory:
@@ -92,5 +93,27 @@ class razor (
     stop      => "${directory}/bin/razor_daemon.rb stop",
     require   => [ Class['mongodb'], File[$directory], Sudo::Conf['razor'] ],
     subscribe => [ Class['razor::nodejs'], Vcsrepo[$directory] ],
+  }
+
+  file { '/usr/local/bin/razor':
+    ensure  => symlink,
+    owner   => '0',
+    group   => '0',
+    mode    => '0755',
+    target  => "${directory}/bin/razor",
+    require => Vcsrepo[$directory],
+  }
+
+  if ! defined(Package['curl']) {
+    package { 'curl':
+      ensure => present,
+    }
+  }
+
+  rz_image { $mk_iso:
+    ensure  => present,
+    type    => 'mk',
+    source  => $mk_source,
+    require => [ File['/usr/local/bin/razor'], Package['curl'], Service['razor'] ],
   }
 }

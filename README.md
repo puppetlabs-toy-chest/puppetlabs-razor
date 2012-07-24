@@ -51,10 +51,38 @@ Puppet master, add razor class to target node:
 * username: razor daemon username, default: razor.
 * directory; installation target directory, default: /opt/razor.
 * address: razor.ipxe chain address, default: facter ipaddress.
+* mk_source: razor mk iso source, default: [Razor-Microkernel project](https://github.com/downloads/puppetlabs/Razor-Microkernel) production iso.
+
+
+    file { 'custom_mk.iso':
+      path   => '/var/tmp/custom_mk.iso',
+      source => 'puppet:///acme_co/files/custom_mk.iso',
+    }
 
     class { 'razor':
-      directory    => '/usr/local/razor',
+      directory => '/usr/local/razor',
+      mk_source => '/var/tmp/custom_mk.iso',
+      require   => File['custom_mk.iso'],
     }
+
+## Resources
+
+rz_image allows management of images available for razor:
+
+    rz_image { 'VMware-VMvisor-Installer-5.0.0-469512.x86_64.iso':
+      ensure  => 'present',
+      type    => 'esxi',
+      source  => '/opt/image/VMware-VMvisor-Installer-5.0.0-469512.x86_64.iso',
+    }
+
+    rz_image { 'Precise':
+      ensure  => 'present',
+      type    => 'os',
+      version => '12.04',
+      source  => '/opt/image/ubuntu-12.04-server-amd64.iso',
+    }
+
+* Although we can query uuid, it can not be specified.
 
 ## Usage
 
