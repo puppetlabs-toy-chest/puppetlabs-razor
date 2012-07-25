@@ -1,6 +1,6 @@
 require 'puppet/type'
 require 'pathname'
-require Pathname.new(__FILE__).dirname.dirname.expand_path + 'puppet_x/puppet_labs/razor'
+require Pathname.new(__FILE__).dirname.dirname.dirname.expand_path + 'puppet_x/puppet_labs/razor'
 
 Puppet::Type.newtype(:rz_image) do
   @doc = <<-EOT
@@ -12,8 +12,7 @@ EOT
   newparam(:name, :namevar => true) do
     desc "The name of the os."
 
-    validate do |path|
-    end
+    newvalues(/\w+/)
   end
 
   newparam(:source) do
@@ -24,12 +23,14 @@ EOT
   end
 
   newproperty(:type) do
+    desc "The image type, currently support mk, os, esxi"
     newvalues('mk', 'os', 'esxi')
     defaultto('mk')
   end
 
   newproperty(:version) do
 
+    newvalues(/[A-Za-z0-9]/)
   end
 
   newproperty(:uuid) do
