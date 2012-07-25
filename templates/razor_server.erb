@@ -1,0 +1,31 @@
+# This file is the main configuration for ProjectRazor
+--- !ruby/object:ProjectRazor::Config::Server 
+admin_port: 8025
+api_port: 8026
+daemon_min_cycle_time: 30
+default_ipmi_password: ipmi_password
+default_ipmi_power_state: "off"
+default_ipmi_username: ipmi_user
+force_mk_uuid: ""
+image_svc_host: <%= @address %>
+image_svc_path: <%= @directory %>/image
+image_svc_port: 8027
+mk_checkin_interval: <%= @mk_checkin_interval %>
+mk_checkin_path: /razor/api/node/checkin
+mk_checkin_skew: 5
+mk_fact_excl_pattern: (^facter.*$)|(^id$)|(^kernel.*$)|(^memoryfree$)|(^operating.*$)|(^osfamily$)|(^path$)|(^ps$)|(^ruby.*$)|(^selinux$)|(^ssh.*$)|(^swap.*$)|(^timezone$)|(^uniqueid$)|(^uptime.*$)|(.*json_str$)
+mk_kmod_install_list_uri: http://localhost:2157/tinycorelinux/kmod-install-list
+mk_log_level: Logger::ERROR
+mk_register_path: /razor/api/node/register
+mk_tce_install_list_uri: http://localhost:2157/tinycorelinux/tce-install-list
+mk_tce_mirror_port: 2157
+mk_tce_mirror_uri: http://localhost:2157/tinycorelinux
+mk_uri: http://<%= @address %>:8026
+node_expire_timeout: 300
+noun: config
+persist_host: <%= @persist_host %>
+persist_mode: :mongo
+persist_port: 27017
+persist_timeout: 10
+register_timeout: 120
+rz_mk_boot_debug_level: ""

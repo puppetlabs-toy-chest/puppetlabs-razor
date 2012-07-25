@@ -6,6 +6,8 @@
 #   [*directory*]: installation directory, default /opt/razor.
 #   [*mk_name*]: Razor tinycore linux mk name.
 #   [*mk_source*]: Razor tinycore linux mk iso file source (local or http).
+#   [*persist_host*]: ip address of the mongodb server.
+#   [*mk_checkin_interval*]: mk checkin interval. 
 #
 # Actions:
 #
@@ -31,7 +33,9 @@ class razor (
   $directory = '/opt/razor',
   $address   = $::ipaddress,
   $mk_name   = 'rz_mk_prod-image.0.9.0.4.iso',
-  $mk_source = 'https://github.com/downloads/puppetlabs/Razor-Microkernel/rz_mk_prod-image.0.9.0.4.iso'
+  $mk_source = 'https://github.com/downloads/puppetlabs/Razor-Microkernel/rz_mk_prod-image.0.9.0.4.iso',
+  $persist_host = '127.0.0.1',
+  $mk_checkin_interval = '127.0.0.1',
 ) {
 
   include sudo
@@ -118,4 +122,12 @@ class razor (
     source  => $mk_source,
     require => [ File['/usr/local/bin/razor'], Package['curl'], Service['razor'] ],
   }
+
+  file { "$directory/conf/razor_server.conf":
+    ensure  => file,
+    content => template('razor/razor_server.erb'),
+    require => Vcsrepo[$directory],
+    notify  => Service['razor'],
+  }
+
 }
