@@ -118,4 +118,17 @@ class razor (
     source  => $mk_source,
     require => [ File['/usr/local/bin/razor'], Package['curl'], Service['razor'] ],
   }
+  
+  exec { 'image_svc_host':
+    command => "/bin/sed -i 's/image_svc_host: .*/image_svc_host: $address/' /opt/razor/conf/razor_server.conf",
+    unless  => "/bin/grep -q 'image_svc_host: $address' /opt/razor/conf/razor_server.conf",
+    notify  => Service['razor'],
+  }
+
+  exec { 'mk_url':
+    command => "/bin/sed -i 's#mk_uri: http://.*:8026#mk_uri: http://$address:8026#' /opt/razor/conf/razor_server.conf",
+    unless  => "/bin/grep -q 'mk_uri: http://$address:8026' /opt/razor/conf/razor_server.conf",
+    notify  => Service['razor'],
+  }
+
 }

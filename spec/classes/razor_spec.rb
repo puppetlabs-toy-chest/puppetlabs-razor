@@ -114,6 +114,16 @@ describe 'razor', :type => :class do
         :require => ['Class[Mongodb]', 'File[/var/lib/razor]', 'Sudo::Conf[razor]'],
         :subscribe => ['Class[Razor::Nodejs]', 'Vcsrepo[/var/lib/razor]']
       )
+      should contain_exec('image_svc_host').with(
+        :command => "/bin/sed -i 's/image_svc_host: .*/image_svc_host: #{params[:address]}/' /opt/razor/conf/razor_server.conf",
+        :unless  => "/bin/grep -q 'image_svc_host: #{params[:address]}' /opt/razor/conf/razor_server.conf",
+        :notify  => 'Service[razor]'
+      )
+      should contain_exec('mk_url').with(
+        :command => "/bin/sed -i 's#mk_uri: http://.*:8026#mk_uri: http://#{params[:address]}:8026#' /opt/razor/conf/razor_server.conf",
+        :unless  => "/bin/grep -q 'mk_uri: http://#{params[:address]}:8026' /opt/razor/conf/razor_server.conf",
+        :notify  => 'Service[razor]'
+      )
     }
   end
 
