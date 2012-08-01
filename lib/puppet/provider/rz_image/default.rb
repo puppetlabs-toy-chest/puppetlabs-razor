@@ -5,6 +5,7 @@ require Pathname.new(__FILE__).dirname.dirname.dirname.dirname.expand_path + 'pu
 Puppet::Type.type(:rz_image).provide(:default) do
 
   commands :razor => 'razor'
+  commands :curl  => 'curl'
 
   def self.query_razor
     PuppetX::PuppetLabs::Razor.new(method(:razor))

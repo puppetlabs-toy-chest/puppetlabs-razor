@@ -15,7 +15,7 @@ module PuppetX::PuppetLabs
         Puppet.debug(images.inspect)
         @images = images.split("\n\n").collect{ |x| Hash[*(x.split(/\n|=>/) - ['Images']).collect{|y| y.strip!}] }
       rescue
-        Puppet::Debug "Failed to gather results from command 'razor image get'."
+        Puppet.debug "Failed to gather results from command 'razor image get'."
         @images = {}
       end
       @images = image_map(@images)
