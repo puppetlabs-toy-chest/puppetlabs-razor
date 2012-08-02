@@ -58,7 +58,7 @@ Puppet::Type.type(:rz_policy).provide(:default) do
 
     policy['broker_uuid'] = @resource[:broker] if @resource[:broker] != 'none'
 
-    Puppet.debug "razor -w model add '#{policy.to_pson}'"
+    Puppet.debug "razor -w policy add '#{policy.to_pson}'"
     command = ['razor', '-w', 'policy', 'add', "'#{policy.to_pson}'"].join(" ")
     execute(command, :combine => true)
   end
