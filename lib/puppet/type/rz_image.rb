@@ -10,8 +10,7 @@ EOT
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc "The name of the os."
-
+    desc "The name of the operating system."
     newvalues(/\w+/)
   end
 
@@ -29,12 +28,12 @@ EOT
   end
 
   newproperty(:version) do
-
+    desc "The image version number. The value is automatically detected for mk and esx."
     newvalues(/[A-Za-z0-9]/)
   end
 
   newproperty(:uuid) do
-    desc "The image UUID. This property is not expected to be speciified by the user."
+    desc "The image UUID. This property is not expected to be specified by the user."
     validate do |value|
       raise Puppet::Error, "Do not specify UUID value."
     end
