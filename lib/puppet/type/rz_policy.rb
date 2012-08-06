@@ -37,7 +37,7 @@ EOT
 
   newproperty(:maximum) do
     desc "The policy maximum deployment instances."
-    defaultto(0)
+    defaultto('0') # This should be fixed in razor.
   end
 
   newproperty(:model) do
