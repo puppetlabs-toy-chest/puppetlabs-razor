@@ -41,6 +41,14 @@ EOT
     validate do |value|
       raise Puppet::Error, "Metadata should be a hash" unless value.is_a? Hash
     end
+    munge do |value|
+      value.each do |k, v|
+        unless k =~ /^@/
+          value["@#{k}"] = v
+          value.delete k
+        end
+      end
+    end
   end
 
   autorequire(:rz_image) do

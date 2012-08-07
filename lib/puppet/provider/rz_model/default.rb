@@ -46,7 +46,6 @@ Puppet::Type.type(:rz_model).provide(:default) do
   def create
     @property_hash[:ensure] = :present
     uuid = query_razor.get_image_uuid(@resource[:image])
-    require 'pp'
 
     model = {
       'template'          => @resource[:template],
@@ -54,9 +53,6 @@ Puppet::Type.type(:rz_model).provide(:default) do
       'image_uuid'        => uuid,
       'req_metadata_hash' => @resource[:metadata],
     }
-
-    require 'json'
-    #razor '-w', 'model', 'add', "'#{model.to_json}'"
 
     Puppet.debug "razor -w model add '#{model.to_pson}'"
     command = ['razor', '-w', 'model', 'add', "'#{model.to_pson}'"].join(" ")

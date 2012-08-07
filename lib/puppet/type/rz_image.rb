@@ -21,15 +21,18 @@ EOT
     end
   end
 
+  newproperty(:version) do
+    desc "The image version. The value is automatically detected for mk and esx."
+    newvalues(/[A-Za-z0-9]/)
+  end
+
   newproperty(:type) do
     desc "The image type, currently support mk, os, esxi"
     newvalues('mk', 'os', 'esxi')
     defaultto('mk')
-  end
-
-  newproperty(:version) do
-    desc "The image version number. The value is automatically detected for mk and esx."
-    newvalues(/[A-Za-z0-9]/)
+    validate do |value|
+      raise Puppet::Error, "Require image version" if value == 'os' and @resource[:version].nil?
+    end
   end
 
   newproperty(:uuid) do
