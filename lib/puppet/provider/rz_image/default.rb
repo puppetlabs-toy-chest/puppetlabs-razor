@@ -60,7 +60,7 @@ Puppet::Type.type(:rz_image).provide(:default) do
       else
         source = resource[:source]
       end
-      case resource[:type]
+      case resource[:type].to_s
       when 'os'
         Puppet.debug "razor image add #{resource[:type]} #{source} #{resource[:name]} #{resource[:version]}"
         razor 'image', 'add', resource[:type], source, resource[:name], resource[:version]
