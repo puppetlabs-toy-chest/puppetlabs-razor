@@ -31,7 +31,9 @@ class razor (
   $directory = '/opt/razor',
   $address   = $::ipaddress,
   $mk_name   = 'rz_mk_prod-image.0.9.0.4.iso',
-  $mk_source = 'https://github.com/downloads/puppetlabs/Razor-Microkernel/rz_mk_prod-image.0.9.0.4.iso'
+  $mk_source = 'https://github.com/downloads/puppetlabs/Razor-Microkernel/rz_mk_prod-image.0.9.0.4.iso',
+  $git_source = 'http://github.com/puppetlabs/Razor.git',
+  $git_revision = 'master'
 ) {
 
   include sudo
@@ -74,7 +76,8 @@ class razor (
   vcsrepo { $directory:
     ensure   => latest,
     provider => git,
-    source   => 'http://github.com/puppetlabs/Razor.git',
+    source   => $git_source,
+    revision => $git_revision,
     require  => Package['git'],
   }
 
