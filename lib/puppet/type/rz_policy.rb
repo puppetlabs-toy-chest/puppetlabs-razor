@@ -23,7 +23,7 @@ EOT
     desc "The policy description."
   end
 
-  newproperty(:tags) do
+  newproperty(:tags, :array_matching => :all) do
     desc "The policy tags."
     munge do |value|
       [ value ] unless value.is_a? Array
