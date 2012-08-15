@@ -64,4 +64,8 @@ EOT
   autorequire(:rz_model) do
     self[:model]
   end
+
+  autorequire(:rz_tag) do
+    self[:tags]
+  end
 end

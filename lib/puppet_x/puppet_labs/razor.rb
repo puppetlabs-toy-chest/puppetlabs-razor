@@ -11,6 +11,7 @@ module PuppetX::PuppetLabs
 
     def get_images
       begin
+        # This command does not support '-w' flag yet, so processing the output.
         images = razor 'image', 'get'
         Puppet.debug(images.inspect)
         @images = images.split("\n\n").collect{ |x| Hash[*(x.split(/\n|=>/) - ['Images']).collect{|y| y.strip!}] }
@@ -61,13 +62,40 @@ module PuppetX::PuppetLabs
       end
     end
 
+    def get_tags
+      output = razor '-w', 'tag', 'get', 'default'
+      uuids = parse(output).collect{ |x| x['@uuid'] if x.include? '@uuid'}.compact
+      tags = uuids.collect do |id|
+        output = razor '-w', 'tag', 'get', id
+        res = strip_at(parse(output).first)
+
+        matchers = res[:tag_matchers].collect{ |m| strip_at(m) }
+        matchers = matchers.collect do |m|
+          m.delete_if{ |k, v| [:classname, :id, :is_template, :uri, :version].include? k }
+          m
+        end
+
+        tag = {
+          :name        => res[:name],
+          :uuid        => res[:uuid],
+          :tag_matcher => matchers,
+          :tag_label   => res[:tag],
+        }
+      end
+    end
+
+    def add_tag(value)
+      output = razor '-w', 'tag', 'add', value
+      uuid = parse(output).collect{ |x| x['@uuid'] if x.include? '@uuid'}.first
+    end
+
     def get_model_uuid(name)
       begin
         model = models.find{|x| x[:name] == name}
         model[:uuid]
       rescue Exception => e
         Puppet.debug e.message
-        raise Puppet::Error, "Failed to find model uuid."
+        raise Puppet::Error, "Failed to find model uuid for label #{name}."
       end
     end
 
@@ -77,7 +105,7 @@ module PuppetX::PuppetLabs
         image[:name]
       rescue Exception => e
         Puppet.debug e.message
-        raise Puppet::Error, "Failed to find image name."
+        raise Puppet::Error, "Failed to find image name for uuid #{uuid}."
       end
     end
 
@@ -87,7 +115,7 @@ module PuppetX::PuppetLabs
         image[:uuid]
       rescue Exception => e
         Puppet.debug e.message
-        raise Puppet::Error, "Failed to find image uuid."
+        raise Puppet::Error, "Failed to find image uuid for name #{name}."
       end
     end
 
