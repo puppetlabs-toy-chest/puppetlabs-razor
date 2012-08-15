@@ -56,7 +56,7 @@ module PuppetX::PuppetLabs
           :model       => res[:model][:label],
           :tags        => res[:tags],
           :enabled     => res[:enabled],
-          :max         => res[:maximum_count],
+          :maximum     => res[:maximum_count],
           :broker      => res[:broker] || 'none',
         }
       end
