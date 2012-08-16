@@ -89,6 +89,22 @@ module PuppetX::PuppetLabs
       uuid = parse(output).collect{ |x| x['@uuid'] if x.include? '@uuid'}.first
     end
 
+    def get_brokers
+      output = razor '-w', 'broker', 'get', 'default'
+      uuids = parse(output).collect{ |x| x['@uuid'] if x.include? '@uuid'}.compact
+      brokers = uuids.collect do |id|
+        output = razor '-w', 'broker', 'get', id
+        res = strip_at(parse(output).first)
+        broker = {
+          :name        => res[:name],
+          :description => res[:description],
+          :uuid        => res[:uuid],
+	  :plugin      => res[:plugin],
+	  :servers     => res[:servers],
+        }
+      end
+    end
+
     def get_model_uuid(name)
       begin
         model = models.find{|x| x[:name] == name}
@@ -119,10 +135,34 @@ module PuppetX::PuppetLabs
       end
     end
 
+    def get_broker_uuid(name)
+      begin
+        broker = brokers.find{|x| x[:name] == name}
+        broker[:uuid]
+      rescue Exception => e
+        Puppet.debug e.message
+        raise Puppet::Error, "Failed to find broker uuid."
+      end
+    end
+
+    def get_broker_uuid(name)
+      begin
+        broker = brokers.find{|x| x[:name] == name}
+        broker[:uuid]
+      rescue Exception => e
+        Puppet.debug e.message
+        raise Puppet::Error, "Failed to find broker uuid."
+      end
+    end
+
     private
 
     define_method(:razor) do |*args|
       @razor.call args
+    end
+
+    def brokers
+      @brokers ||= get_brokers
     end
 
     def images
