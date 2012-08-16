@@ -112,6 +112,12 @@ class razor (
     }
   }
 
+  if ! defined(Package['git']) {
+    package { 'git':
+      ensure => present,
+    }
+  }
+
   rz_image { $mk_name:
     ensure  => present,
     type    => 'mk',
