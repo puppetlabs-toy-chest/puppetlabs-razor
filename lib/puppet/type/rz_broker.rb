@@ -19,16 +19,8 @@ EOT
     newvalues(/\w+/)
   end
 
-  newproperty(:description) do
-    desc "The broker description."
-    newvalues(/\w+/)
-  end
-
   newproperty(:servers, :array_matching => :all) do
     desc "The broker servers."
-    munge do |value|
-      [ value ] unless value.is_a? Array
-    end
   end
 
   newproperty(:uuid) do

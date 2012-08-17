@@ -48,19 +48,19 @@ Puppet::Type.type(:rz_tag).provide(:default) do
     # It's inefficient but safer to add new matchers and remove all existing matchers.
     value.each do |m|
       matcher = {
-        :tag_rule_uuid => @property_hash[:uuid],
+      # :tag_rule_uuid => @property_hash[:uuid],
         :key           => m['key'],
         :value         => m['value'],
         :compare       => m['compare'],
         :inverse       => m['inverse'],
       }
-      command = ['razor', '-w', 'tag', 'matcher', 'add', "'#{matcher.to_pson}'"].join(" ")
+      command = ['razor', '-w', 'tag', @property_hash[:uuid], 'matcher', 'add', "'#{matcher.to_pson}'"].join(" ")
       results = execute(command, :combine => true)
       Puppet.debug(results)
     end
 
     uuids.each do |i|
-      command = ['razor', '-w', 'tag', 'matcher', 'remove', i].join(" ")
+      command = ['razor', '-w', 'tag', @property_hash[:uuid], 'matcher', 'remove', i].join(" ")
       results = execute(command, :combine => true)
       Puppet.debug(results)
     end
@@ -79,13 +79,13 @@ Puppet::Type.type(:rz_tag).provide(:default) do
 
     @resource[:tag_matcher].each do |m|
       matcher = {
-        :tag_rule_uuid => tag_uuid,
+      # :tag_rule_uuid => tag_uuid,
         :key           => m['key'],
         :value         => m['value'],
         :compare       => m['compare'],
         :inverse       => m['inverse'],
       }
-      command = ['razor', '-w', 'tag', 'matcher', 'add', "'#{matcher.to_pson}'"].join(" ")
+      command = ['razor', '-w', 'tag', tag_uuid, 'matcher', 'add', "'#{matcher.to_pson}'"].join(" ")
       results = execute(command, :combine => true)
       Puppet.debug(results)
     end
@@ -94,7 +94,7 @@ Puppet::Type.type(:rz_tag).provide(:default) do
   def destroy
     @property_hash[:ensure] = :absent
     @property_hash[:tag_matcher].each do |m|
-      razor '-w', 'tag', 'matcher', 'remove', m[:uuid]
+      razor '-w', 'tag', @property_hash[:uuid], 'matcher', 'remove', m[:uuid]
     end
     razor '-w', 'tag', 'remove', @property_hash[:uuid]
   end

@@ -57,13 +57,13 @@ module PuppetX::PuppetLabs
           :tags        => res[:tags],
           :enabled     => res[:enabled],
           :maximum     => res[:maximum_count],
-          :broker      => res[:broker] || 'none',
+          :broker      => res[:broker] ? res[:broker][:name] : 'none',
         }
       end
     end
 
     def get_tags
-      output = razor '-w', 'tag', 'get', 'default'
+      output = razor '-w', 'tag', 'get'
       uuids = parse(output).collect{ |x| x['@uuid'] if x.include? '@uuid'}.compact
       tags = uuids.collect do |id|
         output = razor '-w', 'tag', 'get', id
@@ -99,8 +99,8 @@ module PuppetX::PuppetLabs
           :name        => res[:name],
           :description => res[:description],
           :uuid        => res[:uuid],
-	  :plugin      => res[:plugin],
-	  :servers     => res[:servers],
+          :plugin      => res[:plugin],
+          :servers     => res[:servers],
         }
       end
     end
@@ -132,16 +132,6 @@ module PuppetX::PuppetLabs
       rescue Exception => e
         Puppet.debug e.message
         raise Puppet::Error, "Failed to find image uuid for name #{name}."
-      end
-    end
-
-    def get_broker_uuid(name)
-      begin
-        broker = brokers.find{|x| x[:name] == name}
-        broker[:uuid]
-      rescue Exception => e
-        Puppet.debug e.message
-        raise Puppet::Error, "Failed to find broker uuid."
       end
     end
 

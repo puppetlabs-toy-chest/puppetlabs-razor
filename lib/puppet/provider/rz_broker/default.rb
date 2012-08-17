@@ -46,9 +46,9 @@ Puppet::Type.type(:rz_broker).provide(:default) do
     @property_hash[:ensure] = :present
 
     broker = {
-      'name'       => @resource[:name],
-      'description' => @resource[:description],
-      'servers'     => @resource[:servers],
+      'name'        => @resource[:name],
+      'description' => @resource[:name],
+      'servers'     => @resource[:servers].join(','),
       'plugin'      => @resource[:plugin],
     }
 

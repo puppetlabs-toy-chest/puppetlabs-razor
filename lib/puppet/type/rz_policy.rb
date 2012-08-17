@@ -25,9 +25,6 @@ EOT
 
   newproperty(:tags, :array_matching => :all) do
     desc "The policy tags."
-    validate do |value|
-      raise Puppet::Error, "Tags must be an Array value: #{value}." unless value.is_a? Array
-    end
   end
 
   newproperty(:broker) do

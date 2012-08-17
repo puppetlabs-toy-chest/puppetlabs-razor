@@ -30,6 +30,7 @@ EOT
     desc "The image type, currently support mk, os, esxi"
     newvalues('mk', 'os', 'esxi')
     defaultto('mk')
+
     validate do |value|
       raise Puppet::Error, "Require image version" if value == 'os' and @resource[:version].nil?
     end
