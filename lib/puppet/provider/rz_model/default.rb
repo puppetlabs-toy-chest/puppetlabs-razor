@@ -43,6 +43,19 @@ Puppet::Type.type(:rz_model).provide(:default) do
     @property_hash.clear
   end
 
+  # The @ are annoying and needs to be fixed.
+  def prefix_at(val)
+    result = Hash.new
+    val.each do |k, v|
+      if k.chars.first == '@'
+        result[k] = v
+      else
+        result["@#{k}"] = v
+      end
+    end
+    result
+  end
+
   def create
     @property_hash[:ensure] = :present
     uuid = query_razor.get_image_uuid(@resource[:image])
@@ -51,7 +64,7 @@ Puppet::Type.type(:rz_model).provide(:default) do
       'template'          => @resource[:template],
       'label'             => @resource[:name],
       'image_uuid'        => uuid,
-      'req_metadata_hash' => @resource[:metadata],
+      'req_metadata_hash' => prefix_at(@resource[:metadata]),
     }
 
     Puppet.debug "razor -w model add '#{model.to_pson}'"
