@@ -50,9 +50,13 @@ Puppet master, add razor class to target node:
 
 * username: razor daemon username, default: razor.
 * directory; installation target directory, default: /opt/razor.
-* address: razor.ipxe chain address, default: facter ipaddress.
+* address: razor.ipxe chain address, and razor service listen address, default: facter ipaddress.
+* persist_host: ip address of the mongodb server, default: 127.0.0.1.
+* mk_checkin_interval: mk checkin interval, default: 60 seconds.
+* mk_name: razor tiny core linux mk name.
 * mk_source: razor mk iso source, default: [Razor-Microkernel project](https://github.com/downloads/puppetlabs/Razor-Microkernel) production iso.
-
+* git_source: razor git repo source, default: [Puppet Labs Razor](https://github.com/puppetlabs/Razor.git) .
+* git_revision: razor git repo revision, default: master.
 
     file { 'custom_mk.iso':
       path   => '/var/tmp/custom_mk.iso',

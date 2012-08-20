@@ -4,10 +4,13 @@
 #
 #   [*usename*]: daemon service account, default razor.
 #   [*directory*]: installation directory, default /opt/razor.
+#   [*address*]: razor.ipxe chain address, and razor service listen address, default: facter ipaddress.
+#   [*persist_host*]: ip address of the mongodb server.
+#   [*mk_checkin_interval*]: mk checkin interval.
 #   [*mk_name*]: Razor tinycore linux mk name.
 #   [*mk_source*]: Razor tinycore linux mk iso file source (local or http).
-#   [*persist_host*]: ip address of the mongodb server.
-#   [*mk_checkin_interval*]: mk checkin interval. 
+#   [*git_source*]: razor repo source.
+#   [*git_revision*]: razor repo revision.
 #
 # Actions:
 #
@@ -29,13 +32,15 @@
 #   }
 #
 class razor (
-  $username  = 'razor',
-  $directory = '/opt/razor',
-  $address   = $::ipaddress,
-  $mk_name   = 'rz_mk_prod-image.0.9.0.4.iso',
-  $mk_source = 'https://github.com/downloads/puppetlabs/Razor-Microkernel/rz_mk_prod-image.0.9.0.4.iso',
-  $persist_host = '127.0.0.1',
+  $username            = 'razor',
+  $directory           = '/opt/razor',
+  $address             = $::ipaddress,
+  $persist_host        = '127.0.0.1',
   $mk_checkin_interval = '60',
+  $mk_name             = 'rz_mk_prod-image.0.9.0.4.iso',
+  $mk_source           = 'https://github.com/downloads/puppetlabs/Razor-Microkernel/rz_mk_prod-image.0.9.0.4.iso',
+  $git_source          = 'http://github.com/puppetlabs/Razor.git',
+  $git_revision        = 'master'
 ) {
 
   include sudo
@@ -78,7 +83,8 @@ class razor (
   vcsrepo { $directory:
     ensure   => latest,
     provider => git,
-    source   => 'http://github.com/puppetlabs/Razor.git',
+    source   => $git_source,
+    revision => $git_revision,
     require  => Package['git'],
   }
 
