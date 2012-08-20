@@ -4,6 +4,8 @@ describe 'razor', :type => :class do
   let (:params) do
     { :username  => 'blade',
       :directory => '/var/lib/razor',
+      :persist_host => '127.0.0.1',
+      :mk_checkin_interval => '60',
     }
   end
 
@@ -11,7 +13,7 @@ describe 'razor', :type => :class do
     let(:facts) do
       { :osfamily        => 'Debian',
         :operatingsystem => 'Debian',
-        :ipaddress       => '10.13.1.3'
+        :ipaddress       => '10.13.1.3',
       }
     end
     it {
@@ -58,7 +60,16 @@ describe 'razor', :type => :class do
         :require => ['Class[Mongodb]', 'File[/var/lib/razor]', 'Sudo::Conf[razor]'],
         :subscribe => ['Class[Razor::Nodejs]', "Vcsrepo[#{params[:directory]}]"]
       )
-    }
+      should contain_file("#{params[:directory]}/conf/razor_server.conf").with(
+        :ensure  => 'file',
+        :content => /image_svc_host: #{facts[:ipaddress]}/,
+        :content => /image_svc_path: #{params[:directory]}\/image/,
+        :content => /mk_uri: http:\/\/#{facts[:ipaddress]}:8026/,
+        :content => /mk_checkin_interval: #{params[:mk_checkin_interval]}/,
+        :content => /persist_host: #{params[:persist_host]}/,
+        :notify  => 'Service[razor]'
+      )
+     }
   end
 
   context 'on Ubuntu operatingsystems' do
@@ -114,7 +125,16 @@ describe 'razor', :type => :class do
         :require => ['Class[Mongodb]', 'File[/var/lib/razor]', 'Sudo::Conf[razor]'],
         :subscribe => ['Class[Razor::Nodejs]', 'Vcsrepo[/var/lib/razor]']
       )
-    }
+      should contain_file("#{params[:directory]}/conf/razor_server.conf").with(
+        :ensure  => 'file',
+        :content => /image_svc_host: #{facts[:ipaddress]}/,
+        :content => /image_svc_path: #{params[:directory]}\/image/,
+        :content => /mk_uri: http:\/\/#{facts[:ipaddress]}:8026/,
+        :content => /mk_checkin_interval: #{params[:mk_checkin_interval]}/,
+        :content => /persist_host: #{params[:persist_host]}/,
+        :notify  => 'Service[razor]'
+      )
+   }
   end
 
   context 'on RedHat operatingsystems' do
