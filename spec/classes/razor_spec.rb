@@ -2,10 +2,13 @@ require 'spec_helper'
 
 describe 'razor', :type => :class do
   let (:params) do
-    { :username  => 'blade',
-      :directory => '/var/lib/razor',
-      :persist_host => '127.0.0.1',
+    {
+      :username            => 'blade',
+      :directory           => '/var/lib/razor',
+      :persist_host        => '127.0.0.1',
       :mk_checkin_interval => '60',
+      :git_source          => 'http://github.com/johndoe/Razor.git',
+      :git_revision        => '1ef7d2'
     }
   end
 
@@ -53,7 +56,8 @@ describe 'razor', :type => :class do
         should contain_vcsrepo(params[:directory]).with(
           :ensure   => 'latest',
           :provider => 'git',
-          :source   => 'http://github.com/puppetlabs/Razor.git'
+          :source   => params[:git_source],
+          :revision => params[:git_revision]
         )
         should contain_file(params[:directory]).with(
           :ensure => 'directory',
