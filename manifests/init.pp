@@ -112,7 +112,7 @@ class razor (
     owner   => '0',
     group   => '0',
     mode    => '0755',
-    content => template('razor/razor'),
+    content => template('razor/razor.erb'),
     require => Vcsrepo[$directory],
   }
 
