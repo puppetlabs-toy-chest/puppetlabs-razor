@@ -1,15 +1,48 @@
 #!ipxe
 
-isset ${net0/mac} && dhcp net0 ||
-isset ${net1/mac} && dhcp net1 ||
-isset ${net2/mac} && dhcp net2 ||
-isset ${net3/mac} && dhcp net3 ||
-isset ${net4/mac} && dhcp net4 ||
-isset ${net5/mac} && dhcp net5 ||
-isset ${net6/mac} && dhcp net6 ||
-isset ${net7/mac} && dhcp net7 ||
+:n0
+isset ${net0/mac} && dhcp net0 || goto n1
+echo net0 has DHCP
+set dhcp_mac 01-${net0/mac:hexhyp}
 
-chain http://<%= @address %>:8026/razor/api/boot?hw_id=${net0/mac}_${net1/mac}_${net2/mac}_${net3/mac}_${net4/mac}_${net5/mac}_${net6/mac}_${net7/mac} || goto error
+:n1
+isset ${net1/mac} && dhcp net1 || goto n2
+echo net1 has DHCP
+set dhcp_mac 01-${net1/mac:hexhyp}
+
+:n2
+isset ${net2/mac} && dhcp net2 || goto n3
+echo net2 has DHCP
+set dhcp_mac 01-${net2/mac:hexhyp}
+
+:n3
+isset ${net3/mac} && dhcp net3 || goto n4
+echo net3 has DHCP
+set dhcp_mac 01-${net3/mac:hexhyp}
+
+:n4
+isset ${net4/mac} && dhcp net4 || goto n5
+echo net4 has DHCP
+set dhcp_mac 01-${net4/mac:hexhyp}
+
+:n5
+isset ${net5/mac} && dhcp net5 || goto n6
+echo net5 has DHCP
+set dhcp_mac 01-${net5/mac:hexhyp}
+
+:n6
+isset ${net6/mac} && dhcp net6 || goto n7
+echo net6 has DHCP
+set dhcp_mac 01-${net6/mac:hexhyp}
+
+:n7
+isset ${net7/mac} && dhcp net7 || goto s1
+echo net7 has DHCP
+set dhcp_mac 01-${net7/mac:hexhyp}
+
+
+:s1
+chain http://<%= @address %>:8026/razor/api/boot?hw_id=${net0/mac}_${net1/mac}_${net2/mac}_${net3/mac}_${net4/mac}_${net5/mac}_${net6/mac}_${net7/mac}&dhcp_mac=${dhcp_mac} || goto error
 
 :error
 sleep 15
