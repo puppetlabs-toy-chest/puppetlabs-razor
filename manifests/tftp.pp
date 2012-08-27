@@ -23,7 +23,4 @@ class razor::tftp {
     recurse => true,
   }
 
-  tftp::file { 'razor.ipxe':
-    content => template('razor/razor.ipxe.erb'),
-  }
 }

@@ -40,7 +40,8 @@ class razor (
   $mk_name             = 'rz_mk_prod-image.0.9.0.4.iso',
   $mk_source           = 'https://github.com/downloads/puppetlabs/Razor-Microkernel/rz_mk_prod-image.0.9.0.4.iso',
   $git_source          = 'http://github.com/puppetlabs/Razor.git',
-  $git_revision        = 'master'
+  $git_revision        = 'master',
+  $server_opts_hash    = {},
 ) {
 
   include sudo
@@ -129,11 +130,31 @@ class razor (
     require => [ File['/usr/local/bin/razor'], Package['curl'], Service['razor'] ],
   }
 
+  # Add mandatory fields
+  $server_opts_hash["mk_checkin_interval"] = $mk_checkin_interval
+  $server_opts_hash["image_svc_host"] = $address
+  $server_opts_hash["image_svc_path"] = "${directory}/image"
+  $server_opts_hash["persist_host"] = $persist_host
+  $server_opts_hash["mk_uri"] = "http://${address}:8026"
+
   file { "$directory/conf/razor_server.conf":
     ensure  => file,
     content => template('razor/razor_server.erb'),
     require => Vcsrepo[$directory],
     notify  => Service['razor'],
+  }
+
+  # regenerate the file only when razor_server.conf change, 
+  # use a temporary file to let tftp::file handle the permissions
+  exec { "gen_ipxe":
+    command => "${directory}/bin/razor config ipxe > ${directory}/conf/razor.ipxe.source",
+    refreshonly => true,
+    subscribe => File["$directory/conf/razor_server.conf"],
+  }
+
+  tftp::file { 'razor.ipxe':
+    source => "${directory}/conf/razor.ipxe.source",
+    subscribe => Exec['gen_ipxe'],
   }
 
 }
