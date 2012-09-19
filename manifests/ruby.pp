@@ -13,6 +13,7 @@
 class razor::ruby {
 
   include ::ruby
+  include ::ruby::dev
 
   if ! defined(Package['make']) {
     package { 'make':
@@ -26,6 +27,6 @@ class razor::ruby {
             ]:
     ensure   => present,
     provider => gem,
-    require  => [ Class['::ruby'], Package['make'] ],
+    require  => [ Class['::ruby'], Class['::ruby::dev'], Package['make'] ],
   }
 }
