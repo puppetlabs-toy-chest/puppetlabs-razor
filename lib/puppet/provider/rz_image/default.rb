@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'uri'
 
 Puppet::Type.type(:rz_image).provide(:default) do
 
@@ -53,20 +54,21 @@ Puppet::Type.type(:rz_image).provide(:default) do
     @property_hash[:ensure] = :present
 
     begin
-      if resource[:source] =~ /^http/
+      uri = URI.parse(resource[:source])
+      if uri.scheme =~ /^http/
         tmpdir = Dir.mktmpdir(nil, '/var/tmp')
-        source = File.join(tmpdir, resource[:name])
+        source = File.join(tmpdir, File.basename(uri.path))
         curl '-L', resource[:source], '-a', '-o', source
       else
         source = resource[:source]
       end
       case resource[:type]
-      when 'os'
-        Puppet.debug "razor image add #{resource[:type]} #{resource[:source]} #{resource[:name]} #{resource[:version]}"
-        razor 'image', 'add', resource[:type], source, resource[:name], resource[:version]
+      when :os
+        Puppet.debug "razor image add -t #{resource[:type]} -p #{resource[:source]} -n #{resource[:name]} -v #{resource[:version]}"
+        razor 'image', 'add', '-t', resource[:type], '-p', source, '-n', resource[:name], '-v', resource[:version]
       else
-        Puppet.debug "razor image add #{resource[:type]} #{resource[:source]}"
-        razor 'image', 'add', resource[:type], source
+        Puppet.debug "razor image add -t #{resource[:type]} -p #{resource[:source]}"
+        razor 'image', 'add', '-t', resource[:type], '-p', source
       end
     ensure
       FileUtils.remove_entry_secure(tmpdir) if tmpdir
