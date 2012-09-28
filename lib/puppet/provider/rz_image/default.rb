@@ -66,7 +66,7 @@ Puppet::Type.type(:rz_image).provide(:default) do
         razor 'image', 'add', '-t', resource[:type], '-p', source, '-n', resource[:name], '-v', resource[:version]
       else
         Puppet.debug "razor image add -t #{resource[:type]} -p #{resource[:source]}"
-        razor 'image', 'add', '-t', resource[:type], '-p' source
+        razor 'image', 'add', '-t', resource[:type], '-p', source
       end
     ensure
       FileUtils.remove_entry_secure(tmpdir) if tmpdir
