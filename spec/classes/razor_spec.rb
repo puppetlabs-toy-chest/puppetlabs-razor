@@ -8,7 +8,8 @@ describe 'razor', :type => :class do
       :persist_host        => '127.0.0.1',
       :mk_checkin_interval => '60',
       :git_source          => 'http://github.com/johndoe/Razor.git',
-      :git_revision        => '1ef7d2'
+      :git_revision        => '1ef7d2',
+      :server_opts_hash    => { 'mk_log_level' => 'Logger::DEBUG' },
     }
   end
 
@@ -36,9 +37,6 @@ describe 'razor', :type => :class do
           :directory => params[:directory]
         )
         should include_class('razor::tftp')
-        should contain_file("#{platform[:path]}/razor.ipxe").with(
-          :content => /http:\/\/#{facts[:ipaddress]}:8026\/razor\/api\/boot\?hw_id=\$\{net0\/mac\}/
-        )
         should include_class('razor::ruby')
         should contain_user(params[:username]).with(
           :ensure => 'present',
@@ -81,7 +79,16 @@ describe 'razor', :type => :class do
           :content => /mk_uri: http:\/\/#{facts[:ipaddress]}:8026/,
           :content => /mk_checkin_interval: #{params[:mk_checkin_interval]}/,
           :content => /persist_host: #{params[:persist_host]}/,
+          :content => /mk_log_level: #{params[:server_opts_hash]['mk_log_level']}/,
           :notify  => 'Service[razor]'
+        )
+        should contain_exec('gen_ipxe').with_command("#{params[:directory]}/bin/razor config ipxe > #{params[:directory]}/conf/razor.ipxe.source")
+        should contain_exec('gen_ipxe').with(
+          :subscribe => "File[#{params[:directory]}/conf/razor_server.conf]"
+        )
+        should contain_file("#{platform[:path]}/razor.ipxe").with(
+          :source => "#{params[:directory]}/conf/razor.ipxe.source",
+          :subscribe => 'Exec[gen_ipxe]'
         )
       }
     end
