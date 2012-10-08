@@ -19,7 +19,7 @@ describe 'razor::ruby', :type => :class do
           should contain_package(pkg).with(
             :ensure   => 'present',
             :provider => 'gem',
-            :require  => [ 'Class[Ruby]', 'Package[make]' ]
+            :require  => [ 'Class[Ruby]', 'Class[Ruby::Dev]', 'Package[make]' ]
           )
         end
       }
