@@ -1,38 +1,33 @@
 require 'fileutils'
 require 'uri'
+require 'pathname'
+require Pathname.new(__FILE__).dirname.dirname.dirname.dirname.expand_path + 'puppet_x/puppet_labs/razor'
 
 Puppet::Type.type(:rz_image).provide(:default) do
 
   commands :razor => 'razor'
-  commands :curl => 'curl'
+  commands :curl  => 'curl'
 
-  @image_type = {
-    'MicroKernel Image'         => 'mk',
-    'OS Install'                => 'os',
-    'VMware Hypervisor Install' => 'esxi',
-  }
+  def self.query_razor
+    PuppetX::PuppetLabs::Razor.new(method(:razor))
+  end
+
+  def query_razor
+    self.class.query_razor
+  end
 
   mk_resource_methods
 
   def self.instances
     razor_images = Array.new
-    begin
-      images = razor 'image', 'get'
-      images = images.split("\n\n").collect{ |x| Hash[*(x.split(/\n|=>/) - ['Images']).collect{|y| y.strip!}] }
-    rescue
-      images = {}
-    end
+
+    images = query_razor.get_images
 
     images.each do |i|
-      image = {
-        :name => i['OS Name'] || i['ISO Filename'],
-        :ensure => :present,
-        :version => i['Version'] || i['OS Version'],
-        :type => @image_type[i['Type']],
-        :uuid => i['UUID'],
-      }
-
-      razor_images << new(image)
+      i[:ensure] = :present
+      # fallback to use the image iso name for mk.
+      i[:name]   = i[:name] || i[:isoname]
+      razor_images << new(i)
     end
     razor_images
   end
@@ -50,6 +45,11 @@ Puppet::Type.type(:rz_image).provide(:default) do
     @property_hash.clear
   end
 
+  def download(source, target)
+    Puppet.notice("Downloading rz_image from #{source} ...")
+    curl '-L', source, '-a', '-o', target
+  end
+
   def create
     @property_hash[:ensure] = :present
 
@@ -58,7 +58,7 @@ Puppet::Type.type(:rz_image).provide(:default) do
       if uri.scheme =~ /^http/
         tmpdir = Dir.mktmpdir(nil, '/var/tmp')
         source = File.join(tmpdir, File.basename(uri.path))
-        curl '-L', resource[:source], '-a', '-o', source
+        download(resource[:source], source)
       else
         source = resource[:source]
       end
