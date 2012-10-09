@@ -11,13 +11,15 @@ Puppet module dependencies for razor module:
 * [apt module](https://github.com/puppetlabs/puppetlabs-apt)
 * [Mongodb module](https://github.com/puppetlabs/puppetlabs-mongodb)
 * [Node.js module](https://github.com/puppetlabs/puppetlabs-nodejs)
+* [Ruby module](https://github.com/puppetlabs/puppetlabs-ruby)
 * [stdlib module](https://github.com/puppetlabs/puppetlabs-stdlib)
 * [tftp module](https://github.com/puppetlabs/puppetlabs-tftp)
+* [vcsrepo module](https://github.com/puppetlabs/puppetlabs-vcsrepo)
 * [sudo module](https://github.com/saz/puppet-sudo)
 
 ## Installation
 
-Install puppetlabs-node_gce module and dependencies into module_path:
+Install puppetlabs-razor module and dependencies into module_path:
 
     $ puppet module install puppetlabs-razor
     Preparing to install into /etc/puppet/modules ...
@@ -92,3 +94,16 @@ rz_image allows management of images available for razor:
 ## Usage
 
 See [Razor](https://github.com/puppetlabs/Razor) and [Razor wiki pages](https://github.com/puppetlabs/Razor/wiki)
+
+## Contributors
+
+Special thanks to Craig Dunn [@crayfishx](https://github.com/crayfishx) for adding RHEL support for razor dependency modules.
+
+Bill ONeill <woneill@pobox.com>  
+Branan Purvine-Riley <branan@puppetlabs.com>  
+Chad Metcalf <chad@wibidata.com>  
+Gary Larizza <gary@puppetlabs.com>  
+Pierre-Yves Ritschard <pyr@spootnik.org>  
+Rémi <remi@binbash.fr>  
+Stephen Johnson <stephen@puppetlabs.com> <steve@thatbytes.co.uk>  
+Street Preacher <preachermanx@gmail.com>  
