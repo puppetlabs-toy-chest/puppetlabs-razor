@@ -4,7 +4,8 @@
 #
 #   [*usename*]: daemon service account, default razor.
 #   [*directory*]: installation directory, default /opt/razor.
-#   [*address*]: razor.ipxe chain address, and razor service listen address, default: facter ipaddress.
+#   [*address*]: razor.ipxe chain address, and razor service listen address,
+#                default: facter ipaddress.
 #   [*persist_host*]: ip address of the mongodb server.
 #   [*mk_checkin_interval*]: mk checkin interval.
 #   [*mk_name*]: Razor tinycore linux mk name.
@@ -103,8 +104,15 @@ class razor (
     status    => "${directory}/bin/razor_daemon.rb status",
     start     => "${directory}/bin/razor_daemon.rb start",
     stop      => "${directory}/bin/razor_daemon.rb stop",
-    require   => [ Class['mongodb'], File[$directory], Sudo::Conf['razor'] ],
-    subscribe => [ Class['razor::nodejs'], Vcsrepo[$directory] ],
+    require   => [
+      Class['mongodb'],
+      File[$directory],
+      Sudo::Conf['razor']
+    ],
+    subscribe => [
+      Class['razor::nodejs'],
+      Vcsrepo[$directory]
+    ],
   }
 
   file { '/usr/local/bin/razor':
@@ -112,7 +120,7 @@ class razor (
     owner   => '0',
     group   => '0',
     mode    => '0755',
-    content => template('razor/razor'),
+    content => template('razor/razor.erb'),
     require => Vcsrepo[$directory],
   }
 
@@ -126,7 +134,11 @@ class razor (
     ensure  => present,
     type    => 'mk',
     source  => $mk_source,
-    require => [ File['/usr/local/bin/razor'], Package['curl'], Service['razor'] ],
+    require => [
+      File['/usr/local/bin/razor'],
+      Package['curl'],
+      Service['razor']
+    ],
   }
 
   file { "$directory/conf/razor_server.conf":
