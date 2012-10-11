@@ -10,11 +10,13 @@ class razor::tftp {
 
   include tftp
 
-  tftp::file { [ 'pxelinux.0',
-                 'menu.c32',
-                 'ipxe.iso',
-                 'ipxe.lkrn',
-                 'undionly.kpxe' ]:
+  tftp::file { [
+    'pxelinux.0',
+    'menu.c32',
+    'ipxe.iso',
+    'ipxe.lkrn',
+    'undionly.kpxe'
+  ]:
   }
 
   tftp::file { 'pxelinux.cfg':
