@@ -1,6 +1,11 @@
 # Razor Module
 
-Puppet Razor module will perform the installation of Razor on Ubuntu Precise system. See [blog post](http://puppetlabs.com/blog/puppet-razor-module/).
+[Puppet Razor][razor] module will perform the installation of Razor on Ubuntu Precise system. See [blog post](http://puppetlabs.com/blog/puppet-razor-module/).
+
+It is considered part of the overall [Project Razor infrastructure][razor], so you can get
+help using the module or enhancing it over at the main [Project Razor site on GitHub][razor].
+
+[razor]: https://github.com/puppetlabs/razor
 
 ## Dependencies
 
