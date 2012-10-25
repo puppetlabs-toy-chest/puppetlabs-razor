@@ -21,9 +21,20 @@ class razor::ruby {
     }
   }
 
-  package { [ 'autotest', 'base62', 'bson', 'bson_ext', 'colored',
-              'daemons', 'json', 'logger', 'macaddr', 'mocha', 'mongo',
-              'net-ssh', 'require_all', 'syntax', 'uuid'
+  package { [
+             'base62',
+             'bson',
+             'bson_ext',
+             'colored',
+             'daemons',
+             'json',
+             'logger',
+             'macaddr',
+             'mongo',
+             'net-ssh',
+             'require_all',
+             'syntax',
+             'uuid'
             ]:
     ensure   => present,
     provider => gem,
