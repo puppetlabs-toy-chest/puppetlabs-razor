@@ -89,11 +89,14 @@ class razor (
   }
 
   file { $directory:
-    ensure  => directory,
-    mode    => '0755',
-    owner   => $username,
-    group   => $username,
-    require => Vcsrepo[$directory],
+    ensure   => directory,
+    mode     => '0644',
+    owner    => $username,
+    group    => $username,
+    recurse  => true,
+    checksum => none,
+    backup   => false,
+    require  => Vcsrepo[$directory],
   }
 
   service { 'razor':
@@ -131,6 +134,8 @@ class razor (
 
   file { "$directory/conf/razor_server.conf":
     ensure  => file,
+    owner   => $username,
+    group   => $username,
     content => template('razor/razor_server.erb'),
     require => Vcsrepo[$directory],
     notify  => Service['razor'],
