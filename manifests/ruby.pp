@@ -20,6 +20,12 @@ class razor::ruby {
       ensure => present,
     }
   }
+  
+  if ! defined(Package['gcc']) {
+    package { 'gcc':
+      ensure => present,
+    }
+  }
 
   package { [
              'base62',
@@ -38,6 +44,6 @@ class razor::ruby {
             ]:
     ensure   => present,
     provider => gem,
-    require  => [ Class['::ruby'], Class['::ruby::dev'], Package['make'] ],
+    require  => [ Class['::ruby'], Class['::ruby::dev'], Package['make'], Package['gcc'] ],
   }
 }
