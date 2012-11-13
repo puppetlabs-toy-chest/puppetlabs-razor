@@ -50,6 +50,7 @@ Puppet::Type.type(:rz_broker).provide(:default) do
       'description' => @resource[:name],
       'servers'     => @resource[:servers].join(','),
       'plugin'      => @resource[:plugin],
+      'version'     => @resource[:version],
     }
 
     Puppet.debug "razor -w broker add '#{broker.to_pson}'"
