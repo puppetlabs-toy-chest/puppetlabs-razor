@@ -115,7 +115,7 @@ class razor (
     ],
   }
 
-  file { '/usr/local/bin/razor':
+  file { '/usr/bin/razor':
     ensure  => file,
     owner   => '0',
     group   => '0',
@@ -135,7 +135,7 @@ class razor (
     type    => 'mk',
     source  => $mk_source,
     require => [
-      File['/usr/local/bin/razor'],
+      File['/usr/bin/razor'],
       Package['curl'],
       Service['razor']
     ],
