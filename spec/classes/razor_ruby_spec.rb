@@ -9,6 +9,7 @@ describe 'razor::ruby', :type => :class do
       end
       it {
         should contain_package('make')
+        should contain_package('gcc')
         should include_class('ruby')
       }
       it {
@@ -19,7 +20,7 @@ describe 'razor::ruby', :type => :class do
           should contain_package(pkg).with(
             :ensure   => 'present',
             :provider => 'gem',
-            :require  => [ 'Class[Ruby]', 'Class[Ruby::Dev]', 'Package[make]' ]
+            :require  => [ 'Class[Ruby]', 'Class[Ruby::Dev]', 'Package[make]', 'Package[gcc]' ]
           )
         end
       }

@@ -23,6 +23,10 @@ EOT
     desc "The broker servers."
   end
 
+  newproperty(:version) do
+    desc "The version of the broker to use"
+  end
+
   newproperty(:uuid) do
     desc "The broker UUID. This property is not expected to be speciified by the user."
     validate do |value|

@@ -101,6 +101,7 @@ module PuppetX::PuppetLabs
           :uuid        => res[:uuid],
           :plugin      => res[:plugin],
           :servers     => res[:servers],
+          :version     => res[:broker_version],
         }
       end
     end
