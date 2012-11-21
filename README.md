@@ -108,6 +108,7 @@ Bill ONeill <woneill@pobox.com>
 Branan Purvine-Riley <branan@puppetlabs.com>  
 Chad Metcalf <chad@wibidata.com>  
 Gary Larizza <gary@puppetlabs.com>  
+geauxvirtual <justin.guidroz@gmail.com>  
 Pierre-Yves Ritschard <pyr@spootnik.org>  
 Rémi <remi@binbash.fr>  
 Stephen Johnson <stephen@puppetlabs.com> <steve@thatbytes.co.uk>  
