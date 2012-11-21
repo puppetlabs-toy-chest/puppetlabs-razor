@@ -1,3 +1,10 @@
+2012-11-21 Puppet Labs <info@puppetlabs.com> - 0.3.0
+* Add rz_* resources and example manifests.
+* Update modulefile dependencies.
+* Update tftp and configuration template.
+* Add ruby-dev and gcc dependencies.
+* Update spec to use puppet_spec_helper.
+
 2012-07-23 Puppet Labs <info@puppetlabs.com> - 0.2.1
 * Fix rz_image bug due to last minute changes.
 
