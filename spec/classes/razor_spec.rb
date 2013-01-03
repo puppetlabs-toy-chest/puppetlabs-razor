@@ -8,7 +8,8 @@ describe 'razor', :type => :class do
       :persist_host        => '127.0.0.1',
       :mk_checkin_interval => '60',
       :git_source          => 'http://github.com/johndoe/Razor.git',
-      :git_revision        => '1ef7d2'
+      :git_revision        => '1ef7d2',
+      :source              => 'git'
     }
   end
 
@@ -72,7 +73,7 @@ describe 'razor', :type => :class do
           :start     => "/var/lib/razor/bin/razor_daemon.rb start",
           :stop      => "/var/lib/razor/bin/razor_daemon.rb stop",
           :require   => ['Class[Mongodb]', 'File[/var/lib/razor]', 'Sudo::Conf[razor]'],
-          :subscribe => ['Class[Razor::Nodejs]', "Vcsrepo[#{params[:directory]}]"]
+          :subscribe => 'Class[Razor::Nodejs]'
         )
         should contain_file("#{params[:directory]}/conf/razor_server.conf").with(
           :ensure  => 'file',
