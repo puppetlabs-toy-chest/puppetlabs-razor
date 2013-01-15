@@ -1,5 +1,7 @@
 rz_broker { 'demo':
   plugin  => 'puppet',
-  servers => 'puppet.dmz25.lab',
+  metadata => {
+    version => '3.0.2',
+    server  => 'puppet.dmz25.lab',
+  }
 }
- 
