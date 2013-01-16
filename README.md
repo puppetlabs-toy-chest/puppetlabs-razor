@@ -65,17 +65,17 @@ Puppet master, add razor class to target node:
 * git_source: razor git repo source, default: [Puppet Labs Razor](https://github.com/puppetlabs/Razor.git) .
 * git_revision: razor git repo revision, default: master.
 
-    file { 'custom_mk.iso':
-      path   => '/var/tmp/custom_mk.iso',
-      source => 'puppet:///acme_co/files/custom_mk.iso',
-    }
+        file { 'custom_mk.iso':
+          path   => '/var/tmp/custom_mk.iso',
+          source => 'puppet:///acme_co/files/custom_mk.iso',
+        }
 
-    class { 'razor':
-      directory => '/usr/local/razor',
-      mk_name   => 'rz_mk_custom-image.0.9.0.4.iso',
-      mk_source => '/var/tmp/custom_mk.iso',
-      require   => File['custom_mk.iso'],
-    }
+        class { 'razor':
+          directory => '/usr/local/razor',
+          mk_name   => 'rz_mk_custom-image.0.9.0.4.iso',
+          mk_source => '/var/tmp/custom_mk.iso',
+          require   => File['custom_mk.iso'],
+        }
 
 ## Resources
 
@@ -95,6 +95,50 @@ rz_image allows management of images available for razor:
     }
 
 * Although we can query uuid, it can not be specified.
+
+rz_model, rz_tag, rz_policy supports deployment of operating systems:
+
+    rz_model { 'precise_model':
+      ensure      => present,
+      description => 'Ubuntu Precise Model',
+      image       => 'precise_image',
+      metadata    => {
+        'domainname'      => 'puppetlabs.lan',
+        'hostname_prefix' => 'openstack',
+        'rootpassword'    => 'puppet',
+      },
+      template    => 'ubuntu_precise',
+    }
+
+    rz_tag { 'virtual':
+      tag_label   => 'virtual',
+      tag_matcher => [
+        { 'key'     => 'is_virtual',
+          'compare' => 'equal',
+          'value'   => 'true',
+          'inverse' => false, }
+      ],
+    }
+
+    rz_policy { 'precise_policy':
+      ensure   => 'present',
+      broker   => 'none',
+      model    => 'precise_model',
+      enabled  => 'true',
+      tags     => ['virtual'],
+      template => 'linux_deploy',
+      maximum  => 1,
+    }
+
+    rz_broker { 'demo':
+      plugin  => 'puppet',
+      metadata => {
+        version => '3.0.2',
+        server  => 'puppet.dmz25.lab',
+      }
+    }
+
+Additional examples can be found in the tests directory. Currently rz\_\* resources only creates/delete configuration, and does not manage(maintain) razor configuration.
 
 ## Usage
 
