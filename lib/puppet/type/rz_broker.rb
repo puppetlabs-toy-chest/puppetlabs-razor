@@ -19,12 +19,8 @@ EOT
     newvalues(/\w+/)
   end
 
-  newproperty(:servers, :array_matching => :all) do
-    desc "The broker servers."
-  end
-
-  newproperty(:version) do
-    desc "The version of the broker to use"
+  newproperty(:metadata) do
+    desc "The metadata of the broker to use"
   end
 
   newproperty(:uuid) do

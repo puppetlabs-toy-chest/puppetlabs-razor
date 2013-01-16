@@ -46,11 +46,11 @@ Puppet::Type.type(:rz_broker).provide(:default) do
     @property_hash[:ensure] = :present
 
     broker = {
-      'name'        => @resource[:name],
-      'description' => @resource[:name],
-      'servers'     => @resource[:servers].join(','),
-      'plugin'      => @resource[:plugin],
-      'version'     => @resource[:version],
+      'name'              => @resource[:name],
+      'description'       => @resource[:name],
+      'plugin'            => @resource[:plugin],
+      'req_metadata_hash' => @resource[:metadata],
+      'version'           => @resource[:version],
     }
 
     Puppet.debug "razor -w broker add '#{broker.to_pson}'"
