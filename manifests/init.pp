@@ -2,6 +2,7 @@
 #
 # Parameters:
 #
+#   [*source*]: `git`, or `package`: install from git HEAD (default), or from OS packages?
 #   [*usename*]: daemon service account, default razor.
 #   [*directory*]: installation directory, default /opt/razor.
 #   [*address*]: razor.ipxe chain address, and razor service listen address,
@@ -10,8 +11,8 @@
 #   [*mk_checkin_interval*]: mk checkin interval.
 #   [*mk_name*]: Razor tinycore linux mk name.
 #   [*mk_source*]: Razor tinycore linux mk iso file source (local or http).
-#   [*git_source*]: razor repo source.
-#   [*git_revision*]: razor repo revision.
+#   [*git_source*]: razor repo source. (**DEPRECATED**)
+#   [*git_revision*]: razor repo revision. (**DEPRECATED**)
 #
 # Actions:
 #
@@ -33,6 +34,7 @@
 #   }
 #
 class razor (
+  $source              = 'git',
   $username            = 'razor',
   $directory           = '/opt/razor',
   $address             = $::ipaddress,
@@ -56,8 +58,16 @@ class razor (
   # The relationship is here so users can deploy tftp separately.
   Class['razor::tftp'] -> Class['razor']
 
+  file { $directory:
+    ensure  => directory,
+    mode    => '0755',
+    owner   => $username,
+    group   => $username,
+    before  => Class['razor::nodejs']
+  }
+
   class { 'razor::nodejs':
-    directory => $directory,
+    directory => $directory
   }
 
   user { $username:
@@ -75,26 +85,36 @@ class razor (
     content  => "${username} ALL=(root) NOPASSWD: /bin/mount, /bin/umount\n",
   }
 
-  if ! defined(Package['git']) {
-    package { 'git':
-      ensure => present,
+  if $source == 'package' {
+    package { "puppet-razor":
+      ensure => latest
     }
-  }
 
-  vcsrepo { $directory:
-    ensure   => latest,
-    provider => git,
-    source   => $git_source,
-    revision => $git_revision,
-    require  => Package['git'],
-  }
+    Package["puppet-razor"] -> File[$directory]
+    Package["puppet-razor"] -> Service[razor]
+    Package["puppet-razor"] -> File["/usr/bin/razor"]
+    Package["puppet-razor"] -> File["$directory/conf/razor_server.conf"]
+  } elsif $source == "git" {
+    if ! defined(Package['git']) {
+      package { 'git':
+        ensure => present,
+      }
+    }
 
-  file { $directory:
-    ensure  => directory,
-    mode    => '0755',
-    owner   => $username,
-    group   => $username,
-    require => Vcsrepo[$directory],
+    vcsrepo { $directory:
+      ensure   => latest,
+      provider => git,
+      source   => $git_source,
+      revision => $git_revision,
+      require  => Package['git'],
+    }
+
+    Vcsrepo[$directory] -> File[$directory]
+    Vcsrepo[$directory] -> Service[razor]
+    Vcsrepo[$directory] -> File["/usr/bin/razor"]
+    Vcsrepo[$directory] -> File["$directory/conf/razor_server.conf"]
+  } else {
+    fail("unknown razor project source '${source}'")
   }
 
   service { 'razor':
@@ -110,8 +130,7 @@ class razor (
       Sudo::Conf['razor']
     ],
     subscribe => [
-      Class['razor::nodejs'],
-      Vcsrepo[$directory]
+      Class['razor::nodejs']
     ],
   }
 
@@ -120,8 +139,7 @@ class razor (
     owner   => '0',
     group   => '0',
     mode    => '0755',
-    content => template('razor/razor.erb'),
-    require => Vcsrepo[$directory],
+    content => template('razor/razor.erb')
   }
 
   if ! defined(Package['curl']) {
@@ -144,7 +162,6 @@ class razor (
   file { "$directory/conf/razor_server.conf":
     ensure  => file,
     content => template('razor/razor_server.erb'),
-    require => Vcsrepo[$directory],
     notify  => Service['razor'],
   }
 

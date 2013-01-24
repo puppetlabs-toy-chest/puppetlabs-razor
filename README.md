@@ -55,6 +55,9 @@ Puppet master, add razor class to target node:
 
 ## Parameters
 
+* source: `git`, or `package`; default: `git`
+  - this selects what installation method is used for getting Razor on the system
+  - **WARNING**: the default will change from `git` to `package` before the 1.0.0 release of the overall project.
 * username: razor daemon username, default: razor.
 * directory; installation target directory, default: /opt/razor.
 * address: razor.ipxe chain address, and razor service listen address, default: facter ipaddress.
@@ -62,8 +65,10 @@ Puppet master, add razor class to target node:
 * mk_checkin_interval: mk checkin interval, default: 60 seconds.
 * mk_name: razor tiny core linux mk name.
 * mk_source: razor mk iso source, default: [Razor-Microkernel project](https://github.com/downloads/puppetlabs/Razor-Microkernel) production iso.
-* git_source: razor git repo source, default: [Puppet Labs Razor](https://github.com/puppetlabs/Razor.git) .
+* git_source: razor git repo source, default: [Puppet Labs Razor](https://github.com/puppetlabs/Razor.git).
+  - **DEPRECATED**: this feature is deprecated in favour of package installation.
 * git_revision: razor git repo revision, default: master.
+  - **DEPRECATED**: this feature is deprecated in favour of package installation.
 
         file { 'custom_mk.iso':
           path   => '/var/tmp/custom_mk.iso',
