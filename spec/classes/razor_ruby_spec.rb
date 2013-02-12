@@ -13,8 +13,15 @@ describe 'razor::ruby', :type => :class do
         should include_class('ruby')
       }
       it {
+        should contain_package('json').with(
+          :ensure   => '1.7.7',
+          :provider => 'gem',
+          :require  => ['Class[Ruby]', 'Class[Ruby::Dev]', 'Package[make]', 'Package[gcc]']
+          )
+      }
+      it {
         [ 'base62', 'bson', 'bson_ext', 'colored',
-          'daemons', 'json', 'logger', 'macaddr', 'mongo',
+          'daemons', 'logger', 'macaddr', 'mongo',
           'net-ssh', 'require_all', 'syntax', 'uuid'
         ].each do |pkg|
           should contain_package(pkg).with(
