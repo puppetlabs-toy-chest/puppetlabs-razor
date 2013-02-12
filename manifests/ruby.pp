@@ -27,13 +27,18 @@ class razor::ruby {
     }
   }
 
+  package { json:
+    ensure   => '1.7.7',
+    provider => gem,
+    require  => [Class['::ruby'], Class['::ruby::dev'], Package['make'], Package['gcc']]
+  }
+
   package { [
              'base62',
              'bson',
              'bson_ext',
              'colored',
              'daemons',
-             'json',
              'logger',
              'macaddr',
              'mongo',
