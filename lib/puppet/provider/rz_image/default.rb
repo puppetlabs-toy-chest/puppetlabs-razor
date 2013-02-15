@@ -48,7 +48,7 @@ Puppet::Type.type(:rz_image).provide(:default) do
   def download(source, target)
     Puppet.notice("Downloading rz_image from #{source} to #{target} ...")
     FileUtils.mkdir_p(File.dirname(target))
-    curl '-L', source, '-a', '-o', target
+    curl '-f', '-L', source, '-a', '-o', target
   end
 
   def create
