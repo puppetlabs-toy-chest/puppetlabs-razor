@@ -21,6 +21,10 @@ EOT
     end
   end
 
+  newparam(:url) do
+    desc "The image source url. If source and url are provided the image will be downloaded to the source location if it is missing."
+  end
+
   newproperty(:version) do
     desc "The image version. The value is automatically detected for mk and esx."
     newvalues(/[A-Za-z0-9]/)
