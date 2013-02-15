@@ -40,8 +40,8 @@ class razor (
   $address             = $::ipaddress,
   $persist_host        = '127.0.0.1',
   $mk_checkin_interval = '60',
-  $mk_name             = 'rz_mk_prod-image.0.11.0.iso',
-  $mk_source           = 'https://downloads.puppetlabs.com/razor/iso/rz_mk_prod-image.0.11.0.iso',
+  $mk_name             = 'razor-microkernel-latest.iso',
+  $mk_source           = 'https://downloads.puppetlabs.com/razor/iso/prod/razor-microkernel-latest.iso',
   $git_source          = 'http://github.com/puppetlabs/Razor.git',
   $git_revision        = 'master'
 ) {
