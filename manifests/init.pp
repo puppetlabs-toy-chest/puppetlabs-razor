@@ -151,7 +151,8 @@ class razor (
   rz_image { $mk_name:
     ensure  => present,
     type    => 'mk',
-    source  => $mk_source,
+    source  => "${directory}/${mk_name}",
+    url     => $mk_source,
     require => [
       File['/usr/bin/razor'],
       Package['curl'],

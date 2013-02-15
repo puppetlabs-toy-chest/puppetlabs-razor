@@ -46,7 +46,8 @@ Puppet::Type.type(:rz_image).provide(:default) do
   end
 
   def download(source, target)
-    Puppet.notice("Downloading rz_image from #{source} ...")
+    Puppet.notice("Downloading rz_image from #{source} to #{target} ...")
+    FileUtils.mkdir_p(File.dirname(target))
     curl '-L', source, '-a', '-o', target
   end
 
@@ -61,7 +62,11 @@ Puppet::Type.type(:rz_image).provide(:default) do
         download(resource[:source], source)
       else
         source = resource[:source]
+        if not File.file?(source)
+          download(resource[:url], source)
+        end
       end
+
       case resource[:type]
       when :os
         Puppet.debug "razor image add -t #{resource[:type]} -p #{resource[:source]} -n #{resource[:name]} -v #{resource[:version]}"
