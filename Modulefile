@@ -27,3 +27,9 @@ dependency 'puppetlabs/ruby',    '>= 0.0.2'
 dependency 'puppetlabs/tftp',    '>= 0.2.0'
 dependency 'puppetlabs/vcsrepo', '>= 0.0.5'
 dependency 'saz/sudo',           '>= 2.0.0'
+
+
+# Generate the changelog file
+system("./bin/git-log-to-changelog > CHANGELOG")
+$? == 0 or fail "changelog generation #{$?}!"
+
