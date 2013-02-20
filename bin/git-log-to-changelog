@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+echo -n "generate changelog: " >&2
+
+# This makes us mac compatible, too, if they have the right toolchain installed
+if type -p gsort >&/dev/null; then sort=gsort; else sort=sort; fi
+
+top=$(ruby -e 'puts %x{git describe --tags}.chomp.sub(/\.([0-9]+)-/) {|v| ".#{v[1..-2].to_i(10) + 1}-" }')
+for bottom in $(git tag -l | ${sort} -hr) ''; do
+    echo -n "." >&2
+
+    # changelog header
+    header="$(git log -1 --date=short --format="%cd %cN <%cE> - ${top}" "${top}")"
+    echo "${header}"
+    echo "$(echo -n "${header}" | sed -e 's/./=/g')"
+    echo ""
+
+    # changes in this revision; the one space indentation looks *much* nicer overall!
+    git shortlog --no-merges -n -e --format='* %s' -w77,1,3 ${bottom}..${top} | \
+        sed -e 's/^/ /'
+
+    echo ""
+    top="${bottom}"
+done
+
+echo " done." >&2
+exit 0
