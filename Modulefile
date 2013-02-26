@@ -13,11 +13,15 @@ project_page 'https://github.com/puppetlabs/puppetlabs-razor'
 #
 # Technically this isn't accurately reflecting the real next release number,
 # but whatever - it will do for now.
-git_version = %x{git describe --dirty --tags}.chomp.sub(/\.([0-9]+)-/) {|v| ".#{v[1..-2].to_i(10) + 1}-" }
-unless $?.success? and git_version =~ /^\d+\.\d+\.\d+/
-  raise "Unable to determine version using git: #{$?} => #{git_version.inspect}"
+def version
+  Dir.chdir(File.dirname(__FILE__)) do
+    git_version = %x{git describe --dirty --tags}.chomp.sub(/\.([0-9]+)-/) {|v| ".#{v[1..-2].to_i(10) + 1}-" }
+    unless $?.success? and git_version =~ /^\d+\.\d+\.\d+/
+      raise "Unable to determine version using git: #{$?} => #{git_version.inspect}"
+    end
+    return git_version
+  end
 end
-version    git_version
 
 ## Add dependencies, if any:
 dependency 'puppetlabs/stdlib',  '>= 2.0.0'
@@ -30,6 +34,5 @@ dependency 'saz/sudo',           '>= 2.0.0'
 
 
 # Generate the changelog file
-system("./bin/git-log-to-changelog > CHANGELOG")
+system("cd #{File.dirname(__FILE__)} && (./bin/git-log-to-changelog > CHANGELOG)")
 $? == 0 or fail "changelog generation #{$?}!"
-
