@@ -13,6 +13,7 @@
 #   [*mk_source*]: Razor tinycore linux mk iso file source (local or http).
 #   [*git_source*]: razor repo source. (**DEPRECATED**)
 #   [*git_revision*]: razor repo revision. (**DEPRECATED**)
+#   [*rubygems_update*]: Update rubygems, default depends on osfamily.
 #
 # Actions:
 #
@@ -43,15 +44,17 @@ class razor (
   $mk_name             = 'razor-microkernel-latest.iso',
   $mk_source           = 'https://downloads.puppetlabs.com/razor/iso/prod/razor-microkernel-latest.iso',
   $git_source          = 'http://github.com/puppetlabs/Razor.git',
-  $git_revision        = 'master'
+  $git_revision        = 'master',
+  $rubygems_update     = undef
 ) {
-
   include sudo
-  include 'razor::ruby'
   include 'razor::tftp'
 
-  class { 'mongodb':
-    enable_10gen => true,
+  class {
+    'razor::ruby':
+      rubygems_update => $rubygems_update;
+    'mongodb':
+      enable_10gen => true;
   }
 
   Class['razor::ruby'] -> Class['razor']
