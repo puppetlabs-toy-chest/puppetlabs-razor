@@ -10,9 +10,20 @@
 #
 # Usage:
 #   include 'razor::ruby'
-class razor::ruby {
+class razor::ruby (
+  $rubygems_update = undef
+) {
+  include ::ruby::params
 
-  include ::ruby
+  $rubygems_update_real = $rubygems_update ? {
+    undef   => $::ruby::params::rubygems_update,
+    default => $rubygems_update
+  }
+
+  class { '::ruby':
+    rubygems_update => $rubygems_update_real,
+  }
+
   include ::ruby::dev
 
   if ! defined(Package['make']) {
@@ -20,7 +31,7 @@ class razor::ruby {
       ensure => present,
     }
   }
-  
+
   if ! defined(Package['gcc']) {
     package { 'gcc':
       ensure => present,
