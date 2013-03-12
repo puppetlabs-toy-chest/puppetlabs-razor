@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+#
+# manual testing, if you need to modify this:
+#     for version in 0.6.0-1-g212920c 0.6.1-rc1 0.6.1-rc1-1-g212920c 0.6.1; do
+#       ./bin/get-version-from-git $version;
+#     done
+version = ARGV[0] || %x{git describe}.chomp
+
+# Pattern: stuff to keep, the final digit of version tag, any git tagging
+if md = /^(.+)(\d+)-(\d+-g[0-9a-f]+)$/i.match(version)
+  # ...and if we match the pattern we have git commits past the last tag, so
+  # we need to bump the last digit we found.  This works on two cases:
+  #
+  # 0.6.1-1-deadbeef => bump the trivial version, to 0.6.2
+  # 0.6.1-rc1-1-deadbeef => bump the RC number, to 0.6.1-rc2
+  #
+  # In both cases we retain the git tagging information.
+  #
+  # This is necessary because we are at the mercy of puppet module, and the
+  # forge, which refuse to use sensible build numbers, and order things as if
+  # anything with a trailing segment is *before* the relevant version.
+  version = "#{md[1]}#{md[2].to_i(10) + 1}-#{md[3]}"
+end
+
+puts version
+exit 0

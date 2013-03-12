@@ -5,7 +5,7 @@ echo -n "generate changelog: " >&2
 # This makes us mac compatible, too, if they have the right toolchain installed
 if type -p gsort >&/dev/null; then sort=gsort; else sort=sort; fi
 
-top=$(ruby -e 'puts %x{git describe --tags}.chomp.sub(/\.([0-9]+)-/) {|v| ".#{v[1..-2].to_i(10) + 1}-" }')
+top=$($(dirname $0)/get-version-from-git)
 for bottom in $(git tag -l | ${sort} -hr) ''; do
     if [ x"${top}" != x"${bottom}" ]; then
         echo -n "." >&2
