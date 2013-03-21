@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'uri'
 require 'pathname'
+require 'digest/md5'
 require Pathname.new(__FILE__).dirname.dirname.dirname.dirname.expand_path + 'puppet_x/puppet_labs/razor'
 
 Puppet::Type.type(:rz_image).provide(:default) do
@@ -57,12 +58,14 @@ Puppet::Type.type(:rz_image).provide(:default) do
     begin
       uri = URI.parse(resource[:source])
       if uri.scheme =~ /^http/
-        tmpdir = Dir.mktmpdir(nil, '/var/tmp')
-        source = File.join(tmpdir, File.basename(uri.path))
-        download(resource[:source], source)
+        source = File.join(resource[:cache], File.basename(uri.path))
+
+        if !File.exist?(source) || !md5_match?(source, resource[:md5sum])
+          download(resource[:source], source)
+        end
       else
         source = resource[:source]
-        if not File.file?(source)
+        if !File.file?(source) || !md5_match?(source, resource[:md5sum])
           download(resource[:url], source)
         end
       end
@@ -87,5 +90,13 @@ Puppet::Type.type(:rz_image).provide(:default) do
 
   def exists?
     @property_hash[:ensure] == :present
+  end
+
+  # Match a given md5 with the file in source.
+  #
+  # Returns true if the md5 is not set.
+  # Returns true if the md5 given matches with the file's md5.
+  def md5_match?(file, md5)
+    md5.nil? || Digest::MD5.file(source).hexdigest == md5
   end
 end
