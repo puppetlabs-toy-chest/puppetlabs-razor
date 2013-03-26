@@ -47,9 +47,13 @@ Puppet::Type.type(:rz_image).provide(:default) do
   end
 
   def download(source, target)
-    Puppet.notice("Downloading rz_image from #{source} to #{target} ...")
-    FileUtils.mkdir_p(File.dirname(target))
-    curl '-f', '-L', source, '-a', '-o', target
+    if File.exist?(target) && md5_match?(target, resource[:md5sum])
+      Puppet.notice("Using cached rz_image from #{target} ...")
+    else
+      Puppet.notice("Downloading rz_image from #{source} to #{target} ...")
+      FileUtils.mkdir_p(File.dirname(target))
+      curl '-f', '-L', source, '-a', '-o', target
+    end
   end
 
   def create
@@ -58,16 +62,11 @@ Puppet::Type.type(:rz_image).provide(:default) do
     begin
       uri = URI.parse(resource[:source])
       if uri.scheme =~ /^http/
-        source = File.join(resource[:cache], File.basename(uri.path))
-
-        if !File.exist?(source) || !md5_match?(source, resource[:md5sum])
-          download(resource[:source], source)
-        end
+        target = File.join(resource[:cache], File.basename(uri.path))
+        download(resource[:source], target)
       else
-        source = resource[:source]
-        if !File.file?(source) || !md5_match?(source, resource[:md5sum])
-          download(resource[:url], source)
-        end
+        target = resource[:source]
+        download(resource[:url], target)
       end
 
       case resource[:type]
