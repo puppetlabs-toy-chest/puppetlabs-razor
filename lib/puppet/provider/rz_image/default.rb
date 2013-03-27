@@ -95,7 +95,14 @@ Puppet::Type.type(:rz_image).provide(:default) do
   #
   # Returns true if the md5 is not set.
   # Returns true if the md5 given matches with the file's md5.
+  # Returns false if there is a mismatch between digests.
   def md5_match?(file, md5)
-    md5.nil? || Digest::MD5.file(source).hexdigest == md5
+    return true if md5.nil?
+
+    digest = Digest::MD5.file(source).hexdigest
+    return true if digest == md5
+
+    Puppet.info("Image md5 mismatch: expected #{md5} but it was #{digest}.")
+    false
   end
 end
