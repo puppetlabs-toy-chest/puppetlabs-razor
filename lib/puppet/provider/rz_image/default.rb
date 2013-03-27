@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'uri'
 require 'pathname'
+require 'digest/md5'
 require Pathname.new(__FILE__).dirname.dirname.dirname.dirname.expand_path + 'puppet_x/puppet_labs/razor'
 
 Puppet::Type.type(:rz_image).provide(:default) do
@@ -46,9 +47,13 @@ Puppet::Type.type(:rz_image).provide(:default) do
   end
 
   def download(source, target)
-    Puppet.notice("Downloading rz_image from #{source} to #{target} ...")
-    FileUtils.mkdir_p(File.dirname(target))
-    curl '-f', '-L', source, '-a', '-o', target
+    if File.exist?(target) && md5_match?(target, resource[:md5sum])
+      Puppet.notice("Using cached rz_image from #{target} ...")
+    else
+      Puppet.notice("Downloading rz_image from #{source} to #{target} ...")
+      FileUtils.mkdir_p(File.dirname(target))
+      curl '-f', '-L', source, '-a', '-o', target
+    end
   end
 
   def create
@@ -57,14 +62,11 @@ Puppet::Type.type(:rz_image).provide(:default) do
     begin
       uri = URI.parse(resource[:source])
       if uri.scheme =~ /^http/
-        tmpdir = Dir.mktmpdir(nil, '/var/tmp')
-        source = File.join(tmpdir, File.basename(uri.path))
-        download(resource[:source], source)
+        target = File.join(resource[:cache], File.basename(uri.path))
+        download(resource[:source], target)
       else
-        source = resource[:source]
-        if not File.file?(source)
-          download(resource[:url], source)
-        end
+        target = resource[:source]
+        download(resource[:url], target)
       end
 
       case resource[:type]
@@ -87,5 +89,20 @@ Puppet::Type.type(:rz_image).provide(:default) do
 
   def exists?
     @property_hash[:ensure] == :present
+  end
+
+  # Match a given md5 with the file in source.
+  #
+  # Returns true if the md5 is not set.
+  # Returns true if the md5 given matches with the file's md5.
+  # Returns false if there is a mismatch between digests.
+  def md5_match?(file, md5)
+    return true if md5.nil?
+
+    digest = Digest::MD5.file(source).hexdigest
+    return true if digest == md5
+
+    Puppet.info("Image md5 mismatch: expected #{md5} but it was #{digest}.")
+    false
   end
 end
