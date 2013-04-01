@@ -54,6 +54,7 @@ class razor::ruby (
              'macaddr',
              'mongo',
              'net-ssh',
+             'net-scp',
              'require_all',
              'syntax',
              'uuid'
