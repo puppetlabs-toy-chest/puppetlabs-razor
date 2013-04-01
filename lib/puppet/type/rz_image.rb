@@ -46,4 +46,13 @@ EOT
       raise Puppet::Error, "Do not specify UUID value."
     end
   end
+
+  newproperty(:cache) do
+    desc "The images' cache directory. Images will be downloaded here."
+    defaultto(Dir.mktmpdir(nil, '/var/tmp'))
+  end
+
+  newproperty(:md5sum) do
+    desc "The image's md5 sum. Use this property to validate the downloaded image."
+  end
 end
