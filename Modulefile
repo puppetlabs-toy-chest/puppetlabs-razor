@@ -39,3 +39,6 @@ dependency 'saz/sudo',           '>= 2.0.0'
 system("'#{moduledir}'/bin/git-log-to-changelog > '#{moduledir}'/CHANGELOG")
 $? == 0 or fail "changelog generation #{$?}!"
 
+# Generate the contributor list in README.md
+system("git shortlog -se|sort -nr|sed -e's/^.\\{7\\}/ - /' > #{moduledir}/CONTRIBUTORS")
+$? == 0 or fail "contributor list generation #{$?}!"
