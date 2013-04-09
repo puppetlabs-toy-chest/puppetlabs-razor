@@ -151,14 +151,5 @@ See [Razor](https://github.com/puppetlabs/Razor) and [Razor wiki pages](https://
 
 ## Contributors
 
-Special thanks to Craig Dunn [@crayfishx](https://github.com/crayfishx) for adding RHEL support for razor dependency modules.
-
-Bill ONeill <woneill@pobox.com>  
-Branan Purvine-Riley <branan@puppetlabs.com>  
-Chad Metcalf <chad@wibidata.com>  
-Gary Larizza <gary@puppetlabs.com>  
-geauxvirtual <justin.guidroz@gmail.com>  
-Pierre-Yves Ritschard <pyr@spootnik.org>  
-Rémi <remi@binbash.fr>  
-Stephen Johnson <stephen@puppetlabs.com> <steve@thatbytes.co.uk>  
-Street Preacher <preachermanx@gmail.com>  
+A wide array of folks have contributed to the Razor module, including a pile
+of hugely valuable external contributions.  The list was getting too long to maintain inline, but you can see the full list of contributors in the `CONTRIBUTORS` file.
