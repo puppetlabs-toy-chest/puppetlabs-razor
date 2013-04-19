@@ -6,10 +6,7 @@ describe 'razor', :type => :class do
       :username            => 'blade',
       :directory           => '/var/lib/razor',
       :persist_host        => '127.0.0.1',
-      :mk_checkin_interval => '60',
-      :git_source          => 'http://github.com/johndoe/Razor.git',
-      :git_revision        => '1ef7d2',
-      :source              => 'git'
+      :mk_checkin_interval => '60'
     }
   end
 
@@ -52,13 +49,6 @@ describe 'razor', :type => :class do
         should contain_sudo__conf('razor').with(
           :priority => '10',
           :content  => /#{params[:username]} ALL=\(root\)/
-        )
-        should contain_package('git').with( :ensure => 'present' )
-        should contain_vcsrepo(params[:directory]).with(
-          :ensure   => 'latest',
-          :provider => 'git',
-          :source   => params[:git_source],
-          :revision => params[:git_revision]
         )
         should contain_file(params[:directory]).with(
           :ensure => 'directory',
