@@ -2,7 +2,7 @@
 #
 # Parameters:
 #
-#   [*source*]: `tar`, `package`, or `git`: install from the tarball, OS packages, or git HEAD?; `tar` is the default, for now.
+#   [*source*]: `git`, or `package`: install from git HEAD (default), or from OS packages?
 #   [*usename*]: daemon service account, default razor.
 #   [*directory*]: installation directory, default /opt/razor.
 #   [*address*]: razor.ipxe chain address, and razor service listen address,
@@ -11,7 +11,9 @@
 #   [*mk_checkin_interval*]: mk checkin interval.
 #   [*mk_name*]: Razor tinycore linux mk name.
 #   [*mk_source*]: Razor tinycore linux mk iso file source (local or http).
-#   [*rubygems_update*]: Update rubygems, default is **OFF**.
+#   [*git_source*]: razor repo source. (**DEPRECATED**)
+#   [*git_revision*]: razor repo revision. (**DEPRECATED**)
+#   [*rubygems_update*]: Update rubygems, default depends on osfamily.
 #
 # Actions:
 #
@@ -33,7 +35,7 @@
 #   }
 #
 class razor (
-  $source              = 'tar',
+  $source              = 'git',
   $username            = 'razor',
   $directory           = '/opt/razor',
   $address             = $::ipaddress,
@@ -41,14 +43,10 @@ class razor (
   $mk_checkin_interval = '60',
   $mk_name             = 'razor-microkernel-latest.iso',
   $mk_source           = 'https://downloads.puppetlabs.com/razor/iso/prod/razor-microkernel-latest.iso',
-  $rubygems_update     = false
+  $git_source          = 'http://github.com/puppetlabs/Razor.git',
+  $git_revision        = 'master',
+  $rubygems_update     = undef
 ) {
-  # The version of Razor to install; this is not exposed for the user to
-  # modify or change.  Feel free to edit the module yourself, though, if you
-  # want; really, we just don't want to make it easy to point the gun of "old
-  # module, new code" at your own foot. --daniel 2013-04-09
-  $version = '0.9.0'
-
   include sudo
   include 'razor::tftp'
 
@@ -91,47 +89,26 @@ class razor (
   }
 
   if $source == 'package' {
-    package { "puppet-razor": ensure => $version }
+    package { "puppet-razor":
+      ensure => latest
+    }
 
     Package["puppet-razor"] -> File[$directory]
     Package["puppet-razor"] -> Service[razor]
     Package["puppet-razor"] -> File["/usr/bin/razor"]
     Package["puppet-razor"] -> File["$directory/conf/razor_server.conf"]
-  } elsif $source == 'tar' {
-    exec { "refuse to unpack tarball over git install":
-      provider => shell,
-      command  => "! test -d '${directory}'/.git"
-    }
-
-    exec { "unpack razor ${version} from tarball":
-      provider => shell,
-      cwd      => "/var/tmp",
-      command  => "curl http://downloads.puppetlabs.com/razor/puppet-razor-${version}.tar.gz | tar zx",
-      creates  => "/var/tmp/puppet-razor-${version}",
-      require  => [Package[curl], Exec["refuse to unpack tarball over git install"]]
-    }
-
-    exec { "install razor ${version} into ${directory}":
-      provider => shell,
-      cwd      => $directory,
-      command  => "(cd /var/tmp/puppet-razor-${version} && tar c .) | tar x",
-      unless   => "${directory}/bin/razor --version | grep -q '${version}\$'",
-      require  => Exec["unpack razor ${version} from tarball"]
-    }
-
-    Exec["install razor ${version} into ${directory}"] -> Service[razor]
-    Exec["install razor ${version} into ${directory}"] -> File["/usr/bin/razor"]
-    Exec["install razor ${version} into ${directory}"] -> File["${directory}/conf/razor_server.conf"]
-  } elsif $source == 'git' {
+  } elsif $source == "git" {
     if ! defined(Package['git']) {
-      package { 'git': ensure => present }
+      package { 'git':
+        ensure => present,
+      }
     }
 
     vcsrepo { $directory:
       ensure   => latest,
       provider => git,
-      source   => 'http://github.com/puppetlabs/Razor.git',
-      revision => 'master',
+      source   => $git_source,
+      revision => $git_revision,
       require  => Package['git'],
     }
 

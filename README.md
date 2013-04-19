@@ -1,115 +1,63 @@
 # Razor Module
 
-[Puppet Razor][razor] module will perform the installation of Razor, a bare
-metal and virtual machine provisioning solution.  Razor is next generation
-provisioning software that handles bare metal hardware and virtual server
-provisioning with inventory discovery and tagging, rule-based policy
-management, and extensible broker plugin integration.
+[Puppet Razor][razor] module will perform the installation of Razor on Ubuntu Precise system. See [blog post](http://puppetlabs.com/blog/puppet-razor-module/).
 
-See the [original release announcement blog post](http://puppetlabs.com/blog/puppet-razor-module/)
-for more details about this module, and Razor.
-
-This module initially supported only Ubuntu Precise, although we would like -
-and will happily accept patches - to support other server platforms for Razor.
-It should currently work correctly on most platforms.
-
-There is nothing all that inherently platform specific about what we do here.
-Most of the challenges come from finding a suitable source of nodejs.
-
-It is considered part of the overall [Project Razor infrastructure][razor], so
-you can get help using the module or enhancing it over at the main
-[Project Razor site on GitHub][razor].
+It is considered part of the overall [Project Razor infrastructure][razor], so you can get
+help using the module or enhancing it over at the main [Project Razor site on GitHub][razor].
 
 [razor]: https://github.com/puppetlabs/razor
 
+## Dependencies
 
-## What this installs
+The puppet module tool in Puppet Enterprise 2.5.0+ and Puppet 2.7.14+ resolves dependencies automatically.
 
-Each release of the Puppet Labs Razor module will install one specific version
-of Razor.  To obtain a newer version of Razor you must also download and use a
-newer version of the Puppet module.
+Puppet module dependencies for razor module:
 
-Not all modules work like this, and we are well aware that it imposes a
-non-trivial burden on you as the end user.  Given that, why did we choose
-this path?
-
-Razor itself is not yet stable - the leading zero in the version number
-indicates that.  That makes for larger and more disruptive changes than other,
-more stable projects encounter.
-
-When Razor reaches the 1.0.0 milestone, and beyond, this policy will probably
-change: dependencies will be settled, formats solidified, and incompatible
-change rare.
-
-Until then this is the least bad solution.  If we ensure that the Puppet
-module, and any dependency and change handling that it brings are up to date,
-we also ensure that the user experience of deploying Razor is most likely to
-be successful.
-
+* [apt module](https://github.com/puppetlabs/puppetlabs-apt)
+* [Mongodb module](https://github.com/puppetlabs/puppetlabs-mongodb)
+* [Node.js module](https://github.com/puppetlabs/puppetlabs-nodejs)
+* [Ruby module](https://github.com/puppetlabs/puppetlabs-ruby)
+* [stdlib module](https://github.com/puppetlabs/puppetlabs-stdlib)
+* [tftp module](https://github.com/puppetlabs/puppetlabs-tftp)
+* [vcsrepo module](https://github.com/puppetlabs/puppetlabs-vcsrepo)
+* [sudo module](https://github.com/saz/puppet-sudo)
 
 ## Installation
 
-To install puppetlabs-razor module and dependencies into module_path, use the
-standard `puppet module install puppetlabs-razor` command.  This will fetch
-the Razor module, and all dependent modules, for you.
+Install puppetlabs-razor module and dependencies into module_path:
 
-On the Puppet master, add the sudo and razor classes to target node.
-**WARNING**: Including the `sudo` class, which is required for Razor to work,
-may change the setup of a security critical part of your system.
+    $ puppet module install puppetlabs-razor
+    Preparing to install into /etc/puppet/modules ...
+    Downloading from http://forge.puppetlabs.com ...
+    Installing -- do not interrupt ...
+    /etc/puppet/modules
+    └─┬ puppetlabs-razor (v0.1.4)
+      ├─┬ puppetlabs-mongodb (v0.0.1)
+      │ └── puppetlabs-apt (v0.0.3)
+      ├── puppetlabs-nodejs (v0.2.0)
+      ├── puppetlabs-stdlib (v2.3.2)
+      ├── puppetlabs-tftp (v0.1.1)
+      ├── puppetlabs-vcsrepo (v0.0.4)
+      └── saz-sudo (v2.0.0)
 
-Please be careful with this change, and don't rush in.  Ensure that you will
-still have access to the target node before you mess with access rights.
+Puppet apply, apply test manifests:
+
+    puppet apply razor/tests/init.pp
+
+Puppet master, add razor class to target node:
 
     node razor_system {
-      # WARNING: be very, very careful, as this changes your SUDO setup!
-      class { 'sudo': config_file_replace => false }
+      class { 'sudo':
+        config_file_replace => false,
+      }
       include razor
     }
 
-
-## Upgrading
-
-A key goal of the Puppet Razor module is to be as transparently compatible as
-possible: if we can possibly make an upgrade a non-issue, we will.
-
-You can normally upgrade using `puppet module upgrade`, and then rerunning
-Puppet to update the system.  This should bring your installation into line
-with the newest stable release from Puppet Labs.
-
-
-### Upgrading from 0.6.1 or earlier
-
-Until release 0.6.1, the default (or only) installation method was using a
-direct checkout from the git source tree.  That treated all our users as if
-they were developers, including directly giving them untested or lightly
-tested code that had only just been accepted into the project.
-
-With 0.7.0 that changed.  Now the default is to install the stable release
-tar, and users who want to follow nightly versions will have to manually
-manage that installation.
-
-If you used git in 0.6.1 or earlier, add `source => git` to your Razor class configuration; an example would be:
-
-    node razor_system {
-      class { razor: source => git }
-    }
-
-Razor will refuse to install - the Puppet run will fail - if you try to
-install directly from tar over an existing git deployment.  This should
-prevent users being surprised when the two conflict.
-
-To migrate from a git install to a tar (or package) install, it is sufficient
-to delete `/opt/razor/.git` (or the `.git` directory from whatever location
-you installed Razor.)
-
-
 ## Parameters
 
-* source: `tar`, or `package`, or `git`; default: `tar`
+* source: `git`, or `package`; default: `git`
   - this selects what installation method is used for getting Razor on the system
-  - `tar` is the default, and recommended, strategy.
-  - `package` requires that you add appropriate repositories *yourself*; not yet recommended, but it is at least vaguely supported.
-  - `git` is not recommended for use; if you want a git install, you should do it by hand!  This is to support legacy installations only.
+  - **WARNING**: the default will change from `git` to `package` before the 1.0.0 release of the overall project.
 * username: razor daemon username, default: razor.
 * directory; installation target directory, default: /opt/razor.
 * address: razor.ipxe chain address, and razor service listen address, default: facter ipaddress.
@@ -117,6 +65,10 @@ you installed Razor.)
 * mk_checkin_interval: mk checkin interval, default: 60 seconds.
 * mk_name: razor tiny core linux mk name.
 * mk_source: razor mk iso source, default: [Razor-Microkernel project](https://github.com/downloads/puppetlabs/Razor-Microkernel) production iso.
+* git_source: razor git repo source, default: [Puppet Labs Razor](https://github.com/puppetlabs/Razor.git).
+  - **DEPRECATED**: this feature is deprecated in favour of package installation.
+* git_revision: razor git repo revision, default: master.
+  - **DEPRECATED**: this feature is deprecated in favour of package installation.
 
         file { 'custom_mk.iso':
           path   => '/var/tmp/custom_mk.iso',
@@ -193,21 +145,9 @@ rz_model, rz_tag, rz_policy supports deployment of operating systems:
 
 Additional examples can be found in the tests directory. Currently rz\_\* resources only creates/delete configuration, and does not manage(maintain) razor configuration.
 
-## Dependencies
+## Usage
 
-The puppet module tool in Puppet Enterprise 2.5.0+ and Puppet 2.7.14+ resolves dependencies automatically.
-
-Puppet module dependencies for razor module:
-
-* [apt module](https://github.com/puppetlabs/puppetlabs-apt)
-* [Mongodb module](https://github.com/puppetlabs/puppetlabs-mongodb)
-* [Node.js module](https://github.com/puppetlabs/puppetlabs-nodejs)
-* [Ruby module](https://github.com/puppetlabs/puppetlabs-ruby)
-* [stdlib module](https://github.com/puppetlabs/puppetlabs-stdlib)
-* [tftp module](https://github.com/puppetlabs/puppetlabs-tftp)
-* [vcsrepo module](https://github.com/puppetlabs/puppetlabs-vcsrepo)
-* [sudo module](https://github.com/saz/puppet-sudo)
-
+See [Razor](https://github.com/puppetlabs/Razor) and [Razor wiki pages](https://github.com/puppetlabs/Razor/wiki)
 
 ## Contributors
 
