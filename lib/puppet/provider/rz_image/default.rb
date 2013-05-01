@@ -69,20 +69,27 @@ Puppet::Type.type(:rz_image).provide(:default) do
         download(resource[:url], target)
       end
 
-      case resource[:type]
-      when :os
-        Puppet.debug "razor image add -t #{resource[:type]} -p #{resource[:source]} -n #{resource[:name]} -v #{resource[:version]}"
-        razor 'image', 'add', '-t', resource[:type], '-p', source, '-n', resource[:name], '-v', resource[:version]
-      else
-        Puppet.debug "razor image add -t #{resource[:type]} -p #{resource[:source]}"
-        razor 'image', 'add', '-t', resource[:type], '-p', source
+      options = [
+        '-t', resource[:type],
+        '-p', resource[:source],
+        ]
+      if resource[:type] === :os
+        options += [
+          '-n', resource[:name],
+          '-v', resource[:version],
+          ]
       end
+
+      Puppet.debug "razor image add #{options.join(' ')}"
+      output = razor 'image', 'add', *options
+      query_razor.parse(output)
     end
   end
 
   def destroy
     @property_hash[:ensure] = :absent
-    razor 'image', 'remove', @property_hash[:uuid]
+    output = razor 'image', 'remove', @property_hash[:uuid]
+    query_razor.parse(output)
   end
 
   def exists?

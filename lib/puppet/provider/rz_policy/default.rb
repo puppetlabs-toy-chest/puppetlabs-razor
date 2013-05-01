@@ -58,13 +58,14 @@ Puppet::Type.type(:rz_policy).provide(:default) do
     }
 
     Puppet.debug "razor -w policy add '#{policy.to_pson}'"
-    command = ['razor', '-w', 'policy', 'add', "'#{policy.to_pson}'"].join(" ")
-    execute(command, :combine => true)
+    output = razor '-w', 'policy', 'add', policy.to_pson
+    query_razor.parse(output)
   end
 
   def destroy
     @property_hash[:ensure] = :absent
-    razor '-w', 'policy', 'remove', @property_hash[:uuid]
+    output = razor '-w', 'policy', 'remove', @property_hash[:uuid]
+    query_razor.parse(output)
   end
 
   def exists?
