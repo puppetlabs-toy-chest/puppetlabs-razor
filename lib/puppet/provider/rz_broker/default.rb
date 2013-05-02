@@ -53,13 +53,14 @@ Puppet::Type.type(:rz_broker).provide(:default) do
     }
 
     Puppet.debug "razor -w broker add '#{broker.to_pson}'"
-    command = ['razor', '-w', 'broker', 'add', "'#{broker.to_pson}'"].join(" ")
-    execute(command, :combine => true)
+    output = razor '-w', 'broker', 'add', broker.to_pson
+    query_razor.parse(output)
   end
 
   def destroy
     @property_hash[:ensure] = :absent
-    razor '-w', 'broker', 'remove', @property_hash[:uuid]
+    output = razor '-w', 'broker', 'remove', @property_hash[:uuid]
+    query_razor.parse(output)
   end
 
   def exists?
