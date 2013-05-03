@@ -22,7 +22,7 @@ describe 'razor::ruby', :type => :class do
       it {
         [ 'base62', 'bson', 'bson_ext', 'colored',
           'daemons', 'logger', 'macaddr', 'mongo',
-          'net-ssh', 'require_all', 'syntax', 'uuid'
+          'net-ssh', 'net-scp', 'require_all', 'syntax', 'uuid'
         ].each do |pkg|
           should contain_package(pkg).with(
             :ensure   => 'present',
