@@ -68,13 +68,14 @@ Puppet::Type.type(:rz_model).provide(:default) do
     }
 
     Puppet.debug "razor -w model add '#{model.to_pson}'"
-    command = ['razor', '-w', 'model', 'add', "'#{model.to_pson}'"].join(" ")
-    execute(command, :combine => true)
+    output = razor '-w', 'model', 'add', model.to_pson
+    query_razor.parse(output)
   end
 
   def destroy
     @property_hash[:ensure] = :absent
-    razor '-w', 'model', 'remove', @property_hash[:uuid]
+    output = razor '-w', 'model', 'remove', @property_hash[:uuid]
+    query_razor.parse(output)
   end
 
   def exists?

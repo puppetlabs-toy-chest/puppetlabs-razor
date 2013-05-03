@@ -146,6 +146,24 @@ module PuppetX::PuppetLabs
       end
     end
 
+    def parse(response)
+      begin
+        result = PSON.parse(response)
+      rescue PSON::ParserError:
+        # Leading line sometimes has a message for the command-line.
+        response = response.split("\n").drop(1).join("\n")
+        result = PSON.parse(response)
+      end
+
+      if result.include? 'response'
+        result['response']
+      elsif result.include? 'result'
+        raise Puppet::Error, "Bad request: #{result['result']}"
+      else
+        raise Puppet::Error, "Failed to parse output from razor: \n#{response.inspect}"
+      end
+    end
+
     private
 
     define_method(:razor) do |*args|
@@ -162,15 +180,6 @@ module PuppetX::PuppetLabs
 
     def models
       @models ||= get_models
-    end
-
-    def parse(response)
-      result = PSON.parse(response)
-      if result.include? 'response'
-        result['response']
-      else
-        raise Puppet::Error, "Failed to parse output from razor: \n#{response.inspect}"
-      end
     end
 
     def strip_at(val)
