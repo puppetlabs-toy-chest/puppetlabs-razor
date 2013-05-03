@@ -81,15 +81,13 @@ Puppet::Type.type(:rz_image).provide(:default) do
       end
 
       Puppet.debug "razor image add #{options.join(' ')}"
-      output = razor 'image', 'add', *options
-      query_razor.parse(output)
+      razor 'image', 'add', *options
     end
   end
 
   def destroy
     @property_hash[:ensure] = :absent
-    output = razor 'image', 'remove', @property_hash[:uuid]
-    query_razor.parse(output)
+    razor 'image', 'remove', @property_hash[:uuid]
   end
 
   def exists?
