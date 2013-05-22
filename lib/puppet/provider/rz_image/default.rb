@@ -69,14 +69,19 @@ Puppet::Type.type(:rz_image).provide(:default) do
         download(resource[:url], target)
       end
 
-      case resource[:type]
-      when :os
-        Puppet.debug "razor image add -t #{resource[:type]} -p #{target} -n #{resource[:name]} -v #{resource[:version]}"
-        razor 'image', 'add', '-t', resource[:type], '-p', target, '-n', resource[:name], '-v', resource[:version]
-      else
-        Puppet.debug "razor image add -t #{resource[:type]} -p #{target}"
-        razor 'image', 'add', '-t', resource[:type], '-p', target
+      options = [
+        '-t', resource[:type],
+        '-p', resource[:source],
+        ]
+      if resource[:type] === :os
+        options += [
+          '-n', resource[:name],
+          '-v', resource[:version],
+          ]
       end
+
+      Puppet.debug "razor image add #{options.join(' ')}"
+      razor 'image', 'add', *options
     end
   end
 
