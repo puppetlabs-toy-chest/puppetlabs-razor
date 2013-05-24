@@ -8,9 +8,15 @@ class razor::nodejs(
   $directory
 ) {
   include nodejs
+  case $lsbdistcodename {
+    precise: { 
+      $real_ensure = '3.2.2' 
+    }
+    default: { $real_ensure = "present" }
+  }
 
   package { 'express':
-    ensure   => present,
+    ensure   => $real_ensure,
     provider => 'npm',
     require  => Package['npm'],
   }
