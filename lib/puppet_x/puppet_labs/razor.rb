@@ -149,7 +149,7 @@ module PuppetX::PuppetLabs
     def parse(response)
       begin
         result = PSON.parse(response)
-      rescue PSON::ParserError:
+      rescue PSON::ParserError
         # Leading line sometimes has a message for the command-line.
         response = response.split("\n").drop(1).join("\n")
         result = PSON.parse(response)

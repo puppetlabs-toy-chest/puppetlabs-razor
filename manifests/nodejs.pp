@@ -9,12 +9,6 @@ class razor::nodejs(
 ) {
   include nodejs
 
-  package { 'express':
-    ensure   => present,
-    provider => 'npm',
-    require  => Package['npm'],
-  }
-
   nodejs::npm { "${directory}:express":
     ensure  => present,
     version => '2.5.11',
