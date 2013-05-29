@@ -19,10 +19,6 @@ describe 'razor::nodejs', :type => :class do
         }
       end
       it {
-        should contain_package('express').with(
-          :ensure   => 'present',
-          :provider => 'npm'
-        )
         should include_class('nodejs')
         should contain_nodejs__npm("#{params[:directory]}:express")
         should contain_nodejs__npm("#{params[:directory]}:mime")
