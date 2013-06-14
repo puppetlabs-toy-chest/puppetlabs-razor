@@ -71,7 +71,7 @@ Puppet::Type.type(:rz_image).provide(:default) do
 
       options = [
         '-t', resource[:type],
-        '-p', resource[:source],
+        '-p', target,
         ]
       if resource[:type] === :os
         options += [
