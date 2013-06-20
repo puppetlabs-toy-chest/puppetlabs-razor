@@ -8,7 +8,7 @@ class razor::nodejs(
   $directory
 ) {
   include nodejs
-
+  
   nodejs::npm { "${directory}:express":
     ensure  => present,
     version => '2.5.11',
