@@ -1,0 +1,24 @@
+#!/bin/sh
+set -ex
+
+tmpdir="$(dirname "<%= @dest %>")/razor-$$"          # not very secure
+trap "rm -rf '${tmpdir}'" exit
+mkdir -p "${tmpdir}"
+
+# OK, we need to download and unpack the archive into the destination...
+curl -Lo "${tmpdir}"/scratch.zip "<%= @url %>"
+
+# Now, unpack it in the same location.
+unzip -d "${tmpdir}" "${tmpdir}"/scratch.zip
+rm -rf "${tmpdir}"/scratch.zip
+
+# Finally, move that into place overwriting the destination files, but
+# avoiding destroying additional files.  This helps with upgrades...
+mkdir -p "<%= @dest %>"
+if ! tar cC "${tmpdir}/<%= @root %>" . | tar xC "<%= @dest %>"; then
+    rm -rf "<%= @dest %>"
+    exit 1
+fi
+
+# ...done.
+exit 0

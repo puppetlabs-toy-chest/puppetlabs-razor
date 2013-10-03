@@ -1,31 +1,11 @@
-# Class: razor::tftp
-#
-# Actions:
-#
-#   Manages tftp service and files for razor.
-#
-class razor::tftp {
+class razor::tftp(
+  $server
+) {
+  include ::tftp
 
-  $address = $razor::address
+  ::tftp::file { "undionly.kpxe": }
 
-  include tftp
-
-  tftp::file { [
-    'pxelinux.0',
-    'menu.c32',
-    'ipxe.iso',
-    'ipxe.lkrn',
-    'undionly.kpxe'
-  ]:
-  }
-
-  tftp::file { 'pxelinux.cfg':
-    ensure  => directory,
-    source  => 'puppet:///modules/razor/pxelinux.cfg',
-    recurse => true,
-  }
-
-  tftp::file { 'razor.ipxe':
-    content => template('razor/razor.ipxe.erb'),
+  ::tftp::file { "bootstrap.ipxe":
+    content => template('razor/bootstrap.ipxe.erb')
   }
 }

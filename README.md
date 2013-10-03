@@ -1,11 +1,15 @@
 # Razor Module
 
-[Puppet Razor][razor] module will perform the installation of Razor on Ubuntu Precise system. See [blog post](http://puppetlabs.com/blog/puppet-razor-module/).
+[Puppet Razor][razor] module will installation the Razor server on EL6, Debian
+7, and Ubuntu 12.04, or newer versions of those platforms.  It should be
+reasonably portable across platforms, and has decent support for failing well
+on unsupported platforms.
 
-It is considered part of the overall [Project Razor infrastructure][razor], so you can get
-help using the module or enhancing it over at the main [Project Razor site on GitHub][razor].
+It is considered part of the overall [Project Razor infrastructure][razor], so
+you can get help using the module or enhancing it over at the main
+[Project Razor site on GitHub][razor].
 
-[razor]: https://github.com/puppetlabs/razor
+[razor]: https://github.com/puppetlabs/razor-server
 
 ## Dependencies
 
@@ -13,14 +17,7 @@ The puppet module tool in Puppet Enterprise 2.5.0+ and Puppet 2.7.14+ resolves d
 
 Puppet module dependencies for razor module:
 
-* [apt module](https://github.com/puppetlabs/puppetlabs-apt)
-* [Mongodb module](https://github.com/puppetlabs/puppetlabs-mongodb)
-* [Node.js module](https://github.com/puppetlabs/puppetlabs-nodejs)
-* [Ruby module](https://github.com/puppetlabs/puppetlabs-ruby)
-* [stdlib module](https://github.com/puppetlabs/puppetlabs-stdlib)
-* [tftp module](https://github.com/puppetlabs/puppetlabs-tftp)
-* [vcsrepo module](https://github.com/puppetlabs/puppetlabs-vcsrepo)
-* [sudo module](https://github.com/saz/puppet-sudo)
+* [Java module](http://forge.puppetlabs.com/puppetlabs/java)
 
 ## Installation
 
@@ -31,123 +28,46 @@ Install puppetlabs-razor module and dependencies into module_path:
     Downloading from http://forge.puppetlabs.com ...
     Installing -- do not interrupt ...
     /etc/puppet/modules
-    └─┬ puppetlabs-razor (v0.1.4)
-      ├─┬ puppetlabs-mongodb (v0.0.1)
-      │ └── puppetlabs-apt (v0.0.3)
-      ├── puppetlabs-nodejs (v0.2.0)
-      ├── puppetlabs-stdlib (v2.3.2)
-      ├── puppetlabs-tftp (v0.1.1)
-      ├── puppetlabs-vcsrepo (v0.0.4)
-      └── saz-sudo (v2.0.0)
+    └─┬ puppetlabs-razor (v0.7.0)
+      └─┬ puppetlabs-java (v1.0.1)
+        └── puppetlabs-stdlib (v4.1.0)
 
-Puppet apply, apply test manifests:
-
-    puppet apply razor/tests/init.pp
-
-Puppet master, add razor class to target node:
+Then, on your Puppet master, add razor class to target node -- or just use `puppet apply` as normal:
 
     node razor_system {
-      class { 'sudo':
-        config_file_replace => false,
-      }
       include razor
     }
 
+
+## Post-Install Setup
+
+Once the Razor server is installed, you have a handful of tasks to complete:
+
+1. Install PostgreSQL and create a Razor database.
+   - razor-server requires a TCP connection to the database, due to JDBC driver limitations.
+2. `cp /opt/razor/config.yaml.sample /opt/razor/config.yaml`
+3. Edit that file to reflect your local settings.
+4. Run `razor-admin -e production migrate-database` to update the database content.
+
+At that point everything should be working correctly.
+
+
+## Razor Client
+
+This module does not install the Razor client, used to interact with the
+server.  This is available as a Ruby gem, requiring Ruby 1.9.3, and is usually
+installed on developer workstations rather than the Razor server system.
+
+Installing this is left as an exercise to the reader, but:
+
+    puppet resource package name=razor-client provider=gem ensure=latest
+
+
 ## Parameters
 
-* source: `git`, or `package`; default: `git`
-  - this selects what installation method is used for getting Razor on the system
-  - **WARNING**: the default will change from `git` to `package` before the 1.0.0 release of the overall project.
-* username: razor daemon username, default: razor.
-* directory; installation target directory, default: /opt/razor.
-* address: razor.ipxe chain address, and razor service listen address, default: facter ipaddress.
-* persist_host: ip address of the mongodb server, default: 127.0.0.1.
-* mk_checkin_interval: mk checkin interval, default: 60 seconds.
-* mk_name: razor tiny core linux mk name.
-* mk_source: razor mk iso source, default: [Razor-Microkernel project](https://github.com/downloads/puppetlabs/Razor-Microkernel) production iso.
-* git_source: razor git repo source, default: [Puppet Labs Razor](https://github.com/puppetlabs/Razor.git).
-  - **DEPRECATED**: this feature is deprecated in favour of package installation.
-* git_revision: razor git repo revision, default: master.
-  - **DEPRECATED**: this feature is deprecated in favour of package installation.
+* libarchive: set the package name for libarchive explicitly.
+  - libarchive is require for ISO unpacking; if your system is not supported by autodetection you can set a manual package name instead.
 
-        file { 'custom_mk.iso':
-          path   => '/var/tmp/custom_mk.iso',
-          source => 'puppet:///acme_co/files/custom_mk.iso',
-        }
-
-        class { 'razor':
-          directory => '/usr/local/razor',
-          mk_name   => 'rz_mk_custom-image.0.9.0.4.iso',
-          mk_source => '/var/tmp/custom_mk.iso',
-          require   => File['custom_mk.iso'],
-        }
-
-## Resources
-
-rz_image allows management of images available for razor:
-
-    rz_image { 'VMware-VMvisor-Installer-5.0.0-469512.x86_64.iso':
-      ensure  => 'present',
-      type    => 'esxi',
-      source  => '/opt/image/VMware-VMvisor-Installer-5.0.0-469512.x86_64.iso',
-    }
-
-    rz_image { 'Precise':
-      ensure  => 'present',
-      type    => 'os',
-      version => '12.04',
-      source  => '/opt/image/ubuntu-12.04-server-amd64.iso',
-    }
-
-* Although we can query uuid, it can not be specified.
-
-rz_model, rz_tag, rz_policy supports deployment of operating systems:
-
-    rz_model { 'precise_model':
-      ensure      => present,
-      description => 'Ubuntu Precise Model',
-      image       => 'precise_image',
-      metadata    => {
-        'domainname'      => 'puppetlabs.lan',
-        'hostname_prefix' => 'openstack',
-        'rootpassword'    => 'puppet',
-      },
-      template    => 'ubuntu_precise',
-    }
-
-    rz_tag { 'virtual':
-      tag_label   => 'virtual',
-      tag_matcher => [
-        { 'key'     => 'is_virtual',
-          'compare' => 'equal',
-          'value'   => 'true',
-          'inverse' => false, }
-      ],
-    }
-
-    rz_policy { 'precise_policy':
-      ensure   => 'present',
-      broker   => 'none',
-      model    => 'precise_model',
-      enabled  => 'true',
-      tags     => ['virtual'],
-      template => 'linux_deploy',
-      maximum  => 1,
-    }
-
-    rz_broker { 'demo':
-      plugin  => 'puppet',
-      metadata => {
-        version => '3.0.2',
-        server  => 'puppet.dmz25.lab',
-      }
-    }
-
-Additional examples can be found in the tests directory. Currently rz\_\* resources only creates/delete configuration, and does not manage(maintain) razor configuration.
-
-## Usage
-
-See [Razor](https://github.com/puppetlabs/Razor) and [Razor wiki pages](https://github.com/puppetlabs/Razor/wiki)
 
 ## Contributors
 

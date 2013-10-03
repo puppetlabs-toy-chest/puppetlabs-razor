@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# WARNING: This is a generated file.  Manual changes will be ignored.
+#
+# Data filled in by Puppet about where we are installed...
+razor='<%= scope.lookupvar('::razor::server::dest') %>'
+torquebox='<%= scope.lookupvar('::razor::torquebox::dest')%>'
+jruby="${torquebox}/jruby"
+
+# Make sure our path points to the right general location.
+export PATH="${razor}/bin:${jruby}/bin:${PATH}"
+
+# Some other environment variables we might need.
+export TORQUEBOX_HOME="${torquebox}"
+export JBOSS_HOME="${torquebox}/jboss"
+export JRUBY_HOME="${torquebox}/jruby"
+
+# Figure out what we were asked to execute.
+exe="$(basename $0)"
+
+# Find the executable, and run it directly, or fail out gracefully.
+if test -f "${razor}/bin/${exe}"; then
+    exec "${razor}/bin/${exe}" "$@"
+elif test -f "${jruby}/bin/${exe}"; then
+    exec "${jruby}/bin/${exe}"
+else
+    echo "unable to find the ${exe} command in razor!"
+    exit 1
+fi
