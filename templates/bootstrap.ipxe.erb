@@ -1,0 +1,37 @@
+#!ipxe
+
+isset ${ip} || goto dhcp_net0
+set dhcp_mac ${mac:hexhyp}
+goto chain_boot
+
+:dhcp_net0
+isset ${net0/mac} && dhcp net0 || goto dhcp_net1
+echo net0 has DHCP
+set dhcp_mac net0$${net0/mac:hexhyp}
+
+:dhcp_net1
+isset ${net1/mac} && dhcp net1 || goto dhcp_net2
+echo net1 has DHCP
+set dhcp_mac net1$${net1/mac:hexhyp}
+
+:dhcp_net2
+isset ${net2/mac} && dhcp net2 || goto dhcp_net3
+echo net2 has DHCP
+set dhcp_mac net2$${net2/mac:hexhyp}
+
+:dhcp_net3
+isset ${net3/mac} && dhcp net3 || goto chain_boot
+echo net3 has DHCP
+set dhcp_mac net3$${net3/mac:hexhyp}
+
+
+:chain_boot
+echo chain booting the razor script from <%= @server %>
+chain http://<%= @server %>:8080/svc/boot?net0=${net0/mac:hexhyp}&net1=${net1/mac:hexhyp}&net2=${net2/mac:hexhyp}&net3=${net3/mac:hexhyp}&dhcp_mac=${dhcp_mac}&serial=${serial}&asset=${asset}&uuid=${uuid} || goto error
+echo successfully completed the chain-loaded script; booting locally with 'exit'
+exit
+
+:error
+prompt --key s --timeout 60 ERROR, hit 's' for the iPXE shell; reboot in 60 seconds && shell || reboot
+# just in case...
+reboot

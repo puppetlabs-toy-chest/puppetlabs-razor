@@ -26,13 +26,8 @@ end
 version    git_version
 
 ## Add dependencies, if any:
-dependency 'puppetlabs/stdlib',  '>= 2.0.0'
-dependency 'puppetlabs/mongodb', '>= 0.1.0'
-dependency 'puppetlabs/nodejs',  '>= 0.1.1'
-dependency 'puppetlabs/ruby',    '>= 0.0.2'
-dependency 'puppetlabs/tftp',    '>= 0.2.0'
-dependency 'puppetlabs/vcsrepo', '>= 0.0.5'
-dependency 'saz/sudo',           '>= 2.0.0'
+dependency 'puppetlabs/java', '>= 1.0.1'
+dependency 'puppetlabs/tftp', '>= 0.2.1'
 
 
 # Generate the changelog file
