@@ -96,7 +96,8 @@ start() {
 # subordinate user, and start in the background.
 run() {
     exec >&"${JBOSS_CONSOLE_LOG}" \
-        "${JBOSS_SCRIPT}" "-Djboss.server.log.dir=${JBOSS_LOG_DIR}"
+        "${JBOSS_SCRIPT}" "-Djboss.server.log.dir=${JBOSS_LOG_DIR}" \
+        "-b" "0.0.0.0"
 }
 
 
