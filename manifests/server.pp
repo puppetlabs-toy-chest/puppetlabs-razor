@@ -61,7 +61,11 @@ class razor::server {
   }
 
   file { "${dest}/log":
-    ensure => directory, owner => razor-server, group => razor-server, mode => 0775,
+    ensure  => directory, owner => razor-server, group => razor-server, mode => 0775,
     require => Exec["install razor binary distribution to ${dest}"]
+  }
+
+  file { "${dest}/log/production.log":
+    ensure  => file, owner => razor-server, group => razor-server, mode => 0660
   }
 }
