@@ -48,6 +48,9 @@ Once the Razor server is installed, you have a handful of tasks to complete:
 2. `cp /opt/razor/config.yaml.sample /opt/razor/config.yaml`
 3. Edit that file to reflect your local settings.
 4. Run `razor-admin -e production migrate-database` to update the database content.
+5. Configure your DHCP service.
+   - see `examples/isc-dhcpd-example.conf` for an example with the ISC DHCP daemon.
+   - see [the wiki documentation for PXE setup for full and gory details](https://github.com/puppetlabs/razor-server/wiki/Installation#wiki-pxe)
 
 At that point everything should be working correctly.
 
