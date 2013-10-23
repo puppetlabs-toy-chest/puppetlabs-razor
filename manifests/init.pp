@@ -15,9 +15,10 @@
 #   include razor
 #
 class razor (
-  $servername = $fqdn,
-  $libarchive = undef,
-  $tftp       = true
+  $servername   = $fqdn,
+  $libarchive   = undef,
+  $tftp         = true,
+  $java_package = undef
 ) {
   # Ensure libarchive is installed -- the users requested custom version, or
   # our own guesswork as to what the version is on this platform.
@@ -31,7 +32,13 @@ class razor (
   package { "curl":  ensure => latest }
 
   # Install a JVM, since we need one
-  include 'java'
+  if $java_package {
+    class { 'java':
+      package => $java_package
+    }
+  } else {
+    include 'java'
+  }
   Class[java] -> Class[Razor::TorqueBox]
 
   # Install our own TorqueBox bundle, quietly.  This isn't intended to be
