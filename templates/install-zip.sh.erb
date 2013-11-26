@@ -1,6 +1,8 @@
 #!/bin/sh
 set -ex
 
+umask 0022                      # allow rX for group/other
+
 tmpdir="$(dirname "<%= @dest %>")/razor-$$"          # not very secure
 trap "rm -rf '${tmpdir}'" exit
 mkdir -p "${tmpdir}"

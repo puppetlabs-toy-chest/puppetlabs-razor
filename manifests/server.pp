@@ -51,6 +51,11 @@ class razor::server {
     require => Exec["install razor binary distribution to ${dest}"]
   }
 
+  file { $dest:
+    mode => 0644, recurse => true, checksum => none,
+    require => Exec["install razor binary distribution to ${dest}"]
+  }
+
   file { "/var/lib/razor":
     ensure => directory, owner => razor-server, group => razor-server, mode => 0775,
     require => Exec["install razor binary distribution to ${dest}"]

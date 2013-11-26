@@ -7,6 +7,9 @@
 # processname: standalone
 # pidfile: /var/run/razor-server.pid
 
+# Ensure we have a sensible umask
+umask 0027
+
 NAME="razor-server"
 WAIT=30 # seconds
 

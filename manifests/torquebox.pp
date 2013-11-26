@@ -11,6 +11,10 @@ class razor::torquebox {
     path     => '/bin:/usr/bin:/usr/local/bin:/opt/bin',
     creates  => "${dest}/jruby/bin/torquebox",
     require  => [Package[curl], Package[unzip]]
+  } ->
+
+  file { $dest:
+    mode => 0644, recurse => true, checksum => none
   }
 
   user { $user:
