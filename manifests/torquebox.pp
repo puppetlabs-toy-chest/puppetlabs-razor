@@ -13,10 +13,6 @@ class razor::torquebox {
     require  => [Package[curl], Package[unzip]]
   } ->
 
-  file { $dest:
-    mode => 0644, recurse => true, checksum => none
-  }
-
   user { $user:
     ensure   => present,
     system   => true,           # system -- daemon -- user, please
@@ -34,12 +30,6 @@ class razor::torquebox {
 
   file { "/var/log/razor-server":
     ensure => directory, owner => $user, group => 'root', mode => 0755
-  } ->
-
-  file { "/opt/razor-torquebox/jboss/standalone":
-    ensure  => directory, owner => $user, group => $user,
-    recurse => true, checksum => none,
-    require => Exec["install torquebox binary distribution to ${dest}"]
   } ->
 
   service { "razor-server":
