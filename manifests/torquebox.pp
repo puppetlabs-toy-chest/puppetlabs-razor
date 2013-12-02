@@ -1,6 +1,6 @@
 class razor::torquebox {
-  $url  = 'http://torquebox.org/release/org/torquebox/torquebox-dist/3.0.0/torquebox-dist-3.0.0-bin.zip'
-  $root = 'torquebox-3.0.0'
+  $url  = 'http://torquebox.org/release/org/torquebox/torquebox-dist/3.0.1/torquebox-dist-3.0.1-bin.zip'
+  $root = 'torquebox-3.0.1'
   $dest = '/opt/razor-torquebox'
   $user = 'razor-server'
 
