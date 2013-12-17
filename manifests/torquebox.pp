@@ -20,7 +20,15 @@ class razor::torquebox {
     home     => $dest,
     shell    => '/bin/bash',    # if it comes up, let's be common
     comment  => "razor-server daemon user",
-  }
+  } ->
+
+  # Make sure that the deployment directory has appropriate ownership, so that
+  # it can be written to as the razor user.  This is not as appropriate if we
+  # deploy multiple applications in the one container, but for now we have a
+  # dedicated install, so we go with that.
+  file { "${dest}/jboss/standalone":
+    recurse => true, checksum => none, owner => $user
+  } ->
 
   # Install an init script for the Razor torquebox install
   file { "/etc/init.d/razor-server":
