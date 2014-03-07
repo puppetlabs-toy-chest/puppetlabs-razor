@@ -19,7 +19,7 @@ class razor::libarchive {
     default  => undef
   }
 
-  unless $libarchive_package {
+  if ! $libarchive_package {
     fail("unable to autodetect libarchive package name for your platform")
   }
 
