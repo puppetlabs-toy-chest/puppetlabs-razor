@@ -1,11 +1,11 @@
 class razor::libarchive {
-  $libarchive_package = $operatingsystem ? {
-    "Ubuntu" => $operatingsystemrelease ? {
+  $libarchive_package = $::operatingsystem ? {
+    "Ubuntu" => $::operatingsystemrelease ? {
       /^12/   => 'libarchive12',
       /^13/   => 'libarchive13',
       default => undef
     },
-    "Debian" => $operatingsystemmajrelease ? {
+    "Debian" => $::operatingsystemmajrelease ? {
       '6'     => 'libarchive1',
       '7'     => 'libarchive12',
       default => 'libarchive13'
