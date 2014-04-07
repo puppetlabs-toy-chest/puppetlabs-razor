@@ -1,3 +1,8 @@
+.bundle
+.ruby-version
+.vagrant
+Gemfile.lock
+/spec/fixtures
 /pkg
 /CHANGELOG
 /CONTRIBUTORS
