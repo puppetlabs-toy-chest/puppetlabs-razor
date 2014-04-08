@@ -1,0 +1,10 @@
+---
+language: ruby
+script: 'bundle exec rake lint && bundle exec rake spec'
+rvm:
+- 1.9.3
+env:
+  matrix:
+    - PUPPET_GEM_VERSION="~> 3.2.0"
+notifications:
+  email: false
