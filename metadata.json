@@ -1,0 +1,56 @@
+{
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "6"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": ">= 3.2.0 < 3.4.0"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": "3.x"
+    }
+  ],
+  "name": "puppetlabs-razor",
+  "version": "0.11.0",
+  "source": "git://github.com/puppetlabs/puppetlabs-razor.git",
+  "author": "Puppet Labs",
+  "license": "Apache 2.0",
+  "summary": "Razor puppet module",
+  "description": "Razor provisioning system puppet installation module",
+  "project_page": "http://github.com/puppetlabs/puppetlabs-razor",
+  "dependencies": [
+    {
+      "name": "puppetlabs/java",
+      "version_requirement": ">= 1.0.1"
+    },
+    {
+      "name": "puppetlabs/tftp",
+      "version_requirement": ">= 0.2.1"
+    }
+  ]
+}
