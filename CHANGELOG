@@ -1,0 +1,280 @@
+2013-12-17 Daniel Pittman <daniel@puppetlabs.com> - 0.11.0
+===========================================================
+
+ Daniel Pittman <daniel@puppetlabs.com> (4):
+  * Enforce appropriate umask and permission values
+  * Revert Puppet file mode management
+  * Update to the TorqueBox 3.0.1 binary distribution
+  * Ensure correct ownership of TorqueBox deployment directory
+ 
+
+2013-10-14 Daniel Pittman <daniel@puppetlabs.com> - 0.10.2
+===========================================================
+
+ Daniel Pittman <daniel@puppetlabs.com> (3):
+  * Remove obsolete test code
+  * Added an ISC DHCPd configuration example
+  * Add an example manifest for installing Razor using `puppet apply`
+ 
+
+2013-10-11 Daniel Pittman <daniel@puppetlabs.com> - 0.10.1
+===========================================================
+
+ Daniel Pittman <daniel@puppetlabs.com> (2):
+  * Create `production.log` to reduce odds of permissions problems
+  * Bind to wildcard, not loopback, when starting razor-server
+ 
+
+2013-10-09 David Lutterkort <github@watzmann.net> - 0.10.0
+===========================================================
+
+ Daniel Pittman <daniel@puppetlabs.com> (9):
+  * Handle SemVer sorting correctly in the changelog generator
+  * Install the `net-scp` gem in addition to `net-ssh`
+  * Fix dangling `tmpdir` reference from cache feature
+  * Automate rebuilding the contributor list
+  * Make `tar` installation of stable releases the default
+  * Fix missed use of `git_version` parameter in specs
+  * Revert "Make `tar` installation of stable releases the default"
+  * (#136) Remove global nodejs `express` package installation
+  * Move to `razor-server` rather than Ruby/NodeJS Razor
+ 
+ David Calavera <david.calavera@gmail.com> (4):
+  * Cache downloaded images.
+  * Add notice to inform that we're going to use a cached image.
+  * Log image's md5 mismatches.
+  * Define the new cache and md5 properties.
+ 
+ Marc Tardif <marc.tardif@vantrix.com> (2):
+  * (#130) Razor providers should check return value for errors
+  * (#133) Razor image provider should not check for errors like other
+    providers
+ 
+
+2013-03-12 Matthaus Owens <mlitteken@gmail.com> - 0.6.1
+========================================================
+
+ * no changes since the previous version.
+
+2013-03-12 Matthaus Owens <mlitteken@gmail.com> - 0.6.1-rc2
+============================================================
+
+ Daniel Pittman <daniel@puppetlabs.com> (2):
+  * (#114) Handle 0.6.1-rc1 style RC tags in git
+  * Git should ignore the CHANGELOG file
+ 
+
+2013-03-06 Daniel Pittman <daniel@rimspace.net> - 0.6.1-rc1
+============================================================
+
+ Daniel Pittman <daniel@puppetlabs.com> (2):
+  * (#108) Update Modulefile to work when built outside the module root
+  * Remove duplicate headers from generated changelog
+ 
+ Jason Parsons <jparsons@saffron.net> (1):
+  * Quote $@ in razor.erb to avoid issue with tag matchers containing
+    whitespace.
+ 
+ Marc Tardif <marc.tardif@vantrix.com> (1):
+  * (#112) Added rubygems_update param to razor class.
+ 
+
+2013-02-20 Daniel Pittman <daniel@rimspace.net> - 0.6.0
+========================================================
+
+ Caleb Case <calebcase@gmail.com> (3):
+  * Automatic image download for local images.
+  * Make download fail on HTTP error.
+  * Use the latest mk by default.
+ 
+ Daniel Pittman <daniel@puppetlabs.com> (1):
+  * (#106) Automatically generate the changelog from git commits
+ 
+
+2013-02-12 Daniel Pittman <daniel@rimspace.net> - 0.5.0
+========================================================
+
+ Daniel Pittman <daniel@rimspace.net> (2):
+  * Update module for CVE-2013-0269 - Ruby JSON vulnerabilities
+  * Add generated files to our gitignore
+ 
+
+2013-02-06 Daniel Pittman <daniel@rimspace.net> - 0.4.1
+========================================================
+
+ Daniel Pittman <daniel@rimspace.net> (2):
+  * Update with new official ISO download location
+  * Update changelog for 0.4.1 release.
+ 
+ Marc Tardif <marc.tardif@vantrix.com> (1):
+  * (#98) Removed version from broker arguments.
+ 
+
+2013-01-24 Daniel Pittman <daniel@rimspace.net> - 0.4.0
+========================================================
+
+ Daniel Pittman <daniel@rimspace.net> (6):
+  * Extract version number directly from git
+  * Added a git mailmap to improve commit author mapping
+  * Better error detection and discovery for git versioning
+  * Only use annotated git tags for versioning
+  * Add support for installing Razor using OS packages
+  * Update the changelog for the 0.4.0 release
+ 
+ Nan Liu <nan@puppetlabs.com> (2):
+  * Update rz_broker support for metadata.
+  * Update README to reflect additional resources.
+ 
+ Daniel Pittman <daniel@puppetlabs.com> (1):
+  * Revert "Only use annotated git tags for versioning"
+ 
+
+2012-11-21 Nan Liu <nan@puppetlabs.com> - 0.3.0
+================================================
+
+ Nan Liu <nan@puppetlabs.com> (16):
+  * Fix spec test for ruby dependency changes.
+  * Update and simplify testing.
+  * Allow customise razor git version and repo
+  * Update README to reflect changes and spec.
+  * Change razor templates to follow convention.
+  * Fix ipxe template to match latest changes.
+  * Fix some puppet lint warnings.
+  * Add razor puppet resource.
+  * Update resource for new razor cli.
+  * Move define resource razor::system to tests.
+  * Update spec due to ruby dev.
+  * Add contributors list to module.
+  * Fix gemfile for travis.ci
+  * Fix gemfile typo.
+  * Update vcsrepo dependency version.
+  * Update for 0.3.0 release.
+ 
+ geauxvirtual <justin.guidroz@gmail.com> (5):
+  * Adding package gcc to ruby.pp to resolve issues installing bson_ext and
+    json gems when trying to build native extensions
+  * Updating location of razor "executable" to /usr/bin instead of
+    /usr/local/bin as puppet daemon does not have /usr/local/bin in it's path.
+  * Update razor_ruby_spec.rb to include gcc package.
+  * Update rz_broker provider and type to support feature version added in
+    Razor issue/pull request #228
+  * Update get_brokers to pull the broker_version when grabbing the brokers
+    from the razor server.
+ 
+ Pierre-Yves Ritschard <pyr@spootnik.org> (3):
+  * fix image provisionning
+  * use latest microkernel
+  * typo
+ 
+ Stephen Johnson <steve@thatbytes.co.uk> (2):
+  * create templates for razor config and add spec test
+  * fix check interval
+ 
+ Daniel Pittman <daniel@rimspace.net> (2):
+  * Direct people to the main Razor site for help
+  * Restructure option handling to be more script-like
+ 
+ Chad Metcalf <chad@wibidata.com> (2):
+  * Install ruby::dev.
+  * We need v0.2.0 of puppetlabs-tftp
+ 
+ Mehdi Abaakouk <sileht@sileht.net> (1):
+  * Add razor broker resource.
+ 
+ Branan Purvine-Riley <branan@puppetlabs.com> (1):
+  * Add xinetd dependency to .fixtures.yml
+ 
+ Bill ONeill <woneill@pobox.com> (1):
+  * Parse out the original filename from sources that are URLs since 'razor
+    image add' expects an os type to have an iso extension
+ 
+
+2012-07-24 Stephen Johnson <steve@thatbytes.co.uk> - 0.2.1
+===========================================================
+
+ Nan Liu <nan@puppetlabs.com> (3):
+  * Fix symlink for razor and parse empty image output.
+  * Add mk name back to project.
+  * Update module release.
+ 
+
+2012-07-23 Branan Purvine-Riley <branan@puppetlabs.com> - 0.2.0
+================================================================
+
+ Nan Liu <nan@puppetlabs.com> (6):
+  * Change tests to not replace sudo files.
+  * Update mongodb and spec tests.
+  * Update razor tftp configuration.
+  * Change ruby to use puppetlabs module ruby.
+  * Update module release for 0.2.0.
+  * Add rz_image resource type.
+ 
+
+2012-07-02 Nan Liu <nan@puppetlabs.com> - 0.1.4
+================================================
+
+ Nan Liu <nan@puppetlabs.com> (9):
+  * Service should refresh on Vcsrepo changes.
+  * No longer pin gem version for macaddr.
+  * Update razor tftp service.
+  * Update changelog for 0.1.4 release.
+  * Update spec tests for speed.
+  * Pin npm express version.
+  * Update changelog and modulefile for 0.1.4.
+  * Fix bug with service and version pin.
+  * Fix init script issue.
+ 
+ Branan Purvine-Riley <branan@puppetlabs.com> (1):
+  * Switch to the puppetlabs_spec_helper gem
+ 
+ Rémi <remi@binbash.fr> (1):
+  * Change of the source url for Razor git repo from git to http : it's easier
+    when using a http proxy.
+ 
+ Street Preacher <preachermanx@gmail.com> (1):
+  * Fixed for many different network cards PXE boot.  The ommision of the =
+    causes booting to fail with the following error. “Could not fetch
+    razor.ipxe: Operation not supported (http://ipxe.org/3c092003)"
+ 
+
+2012-06-06 Dan Bode <bodepd@gmail.com> - 0.1.3
+===============================================
+
+ Nan Liu <nan@puppetlabs.com> (3):
+  * Remove files not used by razor module.
+  * Update ipxe default config file.
+  * Fix modulefile name to puppetlabs
+ 
+
+2012-06-05 Branan Purvine-Riley <branan@puppetlabs.com> - 0.1.2
+================================================================
+
+ Nan Liu <nan@puppetlabs.com> (7):
+  * Add razor service to module.
+  * Add ruby 1.8 support.
+  * make package optional.
+  * Refactor to a single ruby file.
+  * Update spec tests for Ruby 1.8 support.
+  * Remove unused gems from module.
+  * Be more explicit about Ruby 1.8.7 version.
+ 
+ Gary Larizza <gary@puppetlabs.com> (4):
+  * Provide rspec-puppet test coverage for manifests
+  * Use modulepath if symlinks aren't in spec/fixtures
+  * Allow Travisci to monitor the module
+  * Add .gemfile for Travis CI
+ 
+
+2012-05-23 Michael Stahnke <stahnma@puppetlabs.com> - 0.1.1
+============================================================
+
+ Nan Liu <nan@puppetlabs.com> (2):
+  * Add dependencies missing in build system.
+  * Increment Modulefile release.
+ 
+
+2012-05-23 Nan Liu <nan@puppetlabs.com> - 0.1.0
+================================================
+
+ * no changes since the previous version.
+
