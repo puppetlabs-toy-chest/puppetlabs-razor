@@ -1,5 +1,7 @@
 # Razor Module
 
+**Note** _This module does not work as expected right now, and needs to be fixed. Until then, you need to follow the instructions for [manual installation](https://github.com/puppetlabs/razor-server/wiki/Installation)_
+
 [Puppet Razor][razor] module will installation the Razor server on EL6, Debian
 7, and Ubuntu 12.04, or newer versions of those platforms.  It should be
 reasonably portable across platforms, and has decent support for failing well
