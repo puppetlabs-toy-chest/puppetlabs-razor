@@ -40,7 +40,7 @@
   "source": "git://github.com/puppetlabs/puppetlabs-razor.git",
   "author": "Puppet Labs",
   "license": "Apache 2.0",
-  "summary": "Razor puppet module",
+  "summary": "Installs the Razor server on EL6, Debian 7, and Ubuntu 12.04, or newer versions of those platforms.",
   "description": "Razor provisioning system puppet installation module",
   "project_page": "http://github.com/puppetlabs/puppetlabs-razor",
   "dependencies": [
