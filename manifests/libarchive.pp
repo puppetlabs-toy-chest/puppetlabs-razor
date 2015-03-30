@@ -3,6 +3,7 @@ class razor::libarchive {
     "Ubuntu" => $operatingsystemrelease ? {
       /^12/   => 'libarchive12',
       /^13/   => 'libarchive13',
+      /^14/   => 'libarchive13',
       default => undef
     },
     "Debian" => $operatingsystemmajrelease ? {
