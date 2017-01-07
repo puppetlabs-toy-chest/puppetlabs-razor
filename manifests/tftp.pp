@@ -3,9 +3,9 @@ class razor::tftp(
 ) {
   include ::tftp
 
-  ::tftp::file { "undionly.kpxe": }
+  ::tftp::file { 'undionly.kpxe': }
 
-  ::tftp::file { "bootstrap.ipxe":
+  ::tftp::file { 'bootstrap.ipxe':
     content => template('razor/bootstrap.ipxe.erb')
   }
 }

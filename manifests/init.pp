@@ -28,8 +28,8 @@ class razor (
     include razor::libarchive
   }
 
-  package { "unzip": ensure => latest }
-  package { "curl":  ensure => latest }
+  package { 'unzip': ensure => latest }
+  package { 'curl':  ensure => latest }
 
   # Install a JVM, since we need one
   if $java_package {

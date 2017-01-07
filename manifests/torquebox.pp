@@ -19,7 +19,7 @@ class razor::torquebox {
     password => '*',            # no password logins, please
     home     => $dest,
     shell    => '/bin/bash',    # if it comes up, let's be common
-    comment  => "razor-server daemon user",
+    comment  => 'razor-server daemon user',
   } ->
 
   # Make sure that the deployment directory has appropriate ownership, so that
@@ -27,20 +27,27 @@ class razor::torquebox {
   # deploy multiple applications in the one container, but for now we have a
   # dedicated install, so we go with that.
   file { "${dest}/jboss/standalone":
-    recurse => true, checksum => none, owner => $user
+    recurse  => true,
+    checksum => none,
+    owner    => $user,
   } ->
 
   # Install an init script for the Razor torquebox install
-  file { "/etc/init.d/razor-server":
-    owner   => root, group => root, mode => 0755,
+  file { '/etc/init.d/razor-server':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
     content => template('razor/razor-server.init.erb')
   } ->
 
-  file { "/var/log/razor-server":
-    ensure => directory, owner => $user, group => 'root', mode => 0755
+  file { '/var/log/razor-server':
+    ensure => directory,
+    owner  => $user,
+    group  => 'root',
+    mode   => '0755',
   } ->
 
-  service { "razor-server":
+  service { 'razor-server':
     ensure     => running,
     enable     => true,
     hasrestart => true,
